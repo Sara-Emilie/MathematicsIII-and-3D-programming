@@ -1,2 +1,3 @@
 ﻿  Newtons Metode.cpp
+C:\Users\selau\Desktop\Matte 3\MathematicsIII-and-3D-programming\Compulsory1\Newtons Metode\Newtons Metode\Newtons Metode.cpp(328,57): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
   Newtons Metode.vcxproj -> C:\Users\selau\Desktop\Matte 3\MathematicsIII-and-3D-programming\Compulsory1\Newtons Metode\x64\Debug\Newtons Metode.exe

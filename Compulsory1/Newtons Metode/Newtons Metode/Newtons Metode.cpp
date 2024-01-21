@@ -13,54 +13,7 @@
 
 using namespace std;
 
-//
-//void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-//void processInput(GLFWwindow* window);
-//
-//const unsigned int SCR_WIDTH = 800;
-//const unsigned int SCR_HEIGHT = 600;
-//
-//const char* vertexShaderSource = "#version 330 core\n"
-//"layout (location = 0) in vec2 aPos;\n"
-//"void main()\n"
-//"{\n"
-//"gl_Position = vec4(aPos.x, aPos.y, 0.0, 1.0);\n"
-//"}\0";
-//
-//const char* fragmentShaderSource = "#version 330 core\n"
-//"out vec4 FragColor;\n"
-//"void main()\n"
-//"{\n"
-//"FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-//"}\0";
-//
-
-void writeToFile(const char* fileName, double x, double y, float r, float g)
-{
-    ofstream outputFile(fileName, ios::app);  // Open the file in append mode
-    if (outputFile.is_open()) {
-        outputFile << std::fixed << std::setprecision(3);
-        outputFile << x << " " << y;
-
-
-    }
-    else {
-        cerr << "Unable to open the output file for writing." << endl;
-    }
-    if (y > 0) {
-        outputFile << " Over 0";  // positive y
-    }
-    else if (y < 0) {
-        outputFile << " Under 0";    // negative y
-    }
-    else {
-        outputFile << " y = 0 ";  //  y = 0
-    }
-    outputFile << endl;
-    outputFile.close();
-}
-
-
+// Task 1.1, 1.2 and 1.3
 double f(double x) //f(x) = x^2 - 2
 {
     return pow(x, 2) - 2;
@@ -76,17 +29,64 @@ pair<double, int> newton(double x0, double lower_bound, double upper_bound, cons
     int iter{ 0 };
     auto fx = f(x0);
     double x = x0;
-    writeToFile(file, x, fx, 0, 0);
     while (abs(fx) > 0.01 && x >= lower_bound && x <= upper_bound)
     {
         x = x - fx / df(x);
         fx = f(x);
         iter++;
 
-        cout << fx << ", Iterations: " << iter << endl;
+        cout << fx << ", Iterations: " << iter << endl << endl;
     }
     return pair<double, int>(x, iter);
 }
+
+//Task 1.4 and 1.5
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void processInput(GLFWwindow* window);
+
+const unsigned int SCR_WIDTH = 800;
+const unsigned int SCR_HEIGHT = 600;
+
+
+
+struct vertex
+{
+    float x, y, z, r, g, b, u, v; //I'm only using x,y and r,g 
+};
+
+void writeToFile(const char* fileName, /*double x, double y, float r, float g*/ const vector<vertex>& vertices)
+{
+   
+    std::ofstream outputFile(fileName);  // Open the file (overwrite existing content)
+    if (outputFile.is_open()) {
+        outputFile << "Number of points: " << vertices.size() << std::endl;  // Write the total number of points
+
+        for (const auto& vertex : vertices) {
+            outputFile << std::fixed << std::setprecision(3);
+            outputFile << "X: " << vertex.x << " Y: " << vertex.y;
+
+            if (vertex.y > 0) {
+                outputFile << " Over 0";  // positive y
+            }
+            else if (vertex.y < 0) {
+                outputFile << " Under 0";  // negative y
+            }
+            else {
+                outputFile << " Y = 0 ";  // y = 0
+            }
+
+            outputFile << " R: " << vertex.r << " G: " << vertex.g << std::endl;
+        }
+
+        outputFile.close();
+    }
+    else {
+        std::cerr << "Unable to open the output file for writing." << std::endl;
+    }
+  
+}
+
 
 void printNewton(pair<double, int> par, double lower_bound, double upper_bound)
 {
@@ -102,12 +102,8 @@ void printNewton(pair<double, int> par, double lower_bound, double upper_bound)
 
 }
 
-    struct vertex
-    {
-        float x, y, z, r, g, b, u, v;
-    };
-
-    void createFunction(int iterations, int start, const char* filename)
+  
+ vector<vertex> createFunction(int iterations, int start, const char* filename)
     {
         float n = 0.05f;
         float x0, x1, y0, y1, y2;
@@ -138,20 +134,198 @@ void printNewton(pair<double, int> par, double lower_bound, double upper_bound)
                 //rising
                 Vertex.r = 0.0f;
                 Vertex.g = 1.0f;
-                Vertex.b = 0.0f;
             }
             else {
                 //decreasing
                 Vertex.r = 1.0f;
                 Vertex.g = 0.0;
-                Vertex.b = 0.0f;
             }
             mVertices.push_back(Vertex);
-            writeToFile(filename, Vertex.x, Vertex.y, Vertex.r, Vertex.g);
+            //writeToFile(filename, Vertex.x, Vertex.y, Vertex.r, Vertex.g);
+            writeToFile(filename, mVertices);
             cout << "X = " << Vertex.x << " " << "Y = " << Vertex.y << "The derivate: " << y2 << endl;
 
         }
+        return mVertices;
     };
+
+    void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+    {
+        glViewport(0, 0, width, height);
+        cout << "Window resized with width " << width << " and height " << height << endl;
+    }
+
+    void processInput(GLFWwindow* window)
+    {
+        if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+            glfwSetWindowShouldClose(window, true);
+    }
+
+    void drawFunction(const vector<vertex>& vertices)
+    {
+        //Initialize GLFW
+        if (!glfwInit())
+        {
+           cerr << "Failed to initialize GLFW" << endl;
+           return;
+        }
+
+        //Set version of glfw to 3.3
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //Set profile to core
+
+        //Create the GLFW window aswell as it's OpenGL context
+        GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Graph window", NULL, NULL);
+        if (window == NULL)
+        {
+            cout << "Failed to create the GLFW window" << endl;
+            glfwTerminate();
+            return;
+        }
+
+        //Make the window the current context
+        glfwMakeContextCurrent(window);
+
+
+        //Initialize GLAD
+        if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+        {
+            cout << "Failed to initialize GLAD" << endl;
+            return;
+        }
+
+        //Set the viewport
+        glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
+
+        //Set the callback function for when the window is resized
+        glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
+        // Set the callback function for window resize
+        glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
+        // Set up OpenGL rendering state
+        glEnable(GL_PROGRAM_POINT_SIZE);
+        glPointSize(5.0f);
+
+        // Vertex Buffer Object (VBO) and Vertex Array Object (VAO) setup
+        GLuint VBO, VAO;
+        glGenVertexArrays(1, &VAO);
+        glGenBuffers(1, &VBO);
+
+        glBindVertexArray(VAO);
+
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(vertex), vertices.data(), GL_STATIC_DRAW);
+
+        // Position attribute
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)0);
+        glEnableVertexAttribArray(0);
+
+        // Color attribute
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)(3 * sizeof(float)));
+        glEnableVertexAttribArray(1);
+
+        // Unbind VAO
+        glBindVertexArray(0);
+
+        // Shader setup (vertex and fragment shaders)
+        const char* vertexShaderSource = "#version 330 core\n"
+            "layout (location = 0) in vec3 aPos;\n"
+            "layout (location = 1) in vec3 aColor;\n"
+            "out vec3 ourColor;\n"
+            "void main()\n"
+            "{\n"
+            "   gl_Position = vec4(aPos, 1.0);\n"
+            "   ourColor = aColor;\n"
+            "}\0";
+        const char* fragmentShaderSource = "#version 330 core\n"
+            "out vec4 FragColor;\n"
+            "in vec3 ourColor;\n"
+            "void main()\n"
+            "{\n"
+            "   FragColor = vec4(ourColor, 1.0f);\n"
+            "}\n\0";
+
+        // Compile shaders
+        GLuint vertexShader, fragmentShader, shaderProgram;
+        vertexShader = glCreateShader(GL_VERTEX_SHADER);
+        glShaderSource(vertexShader, 1, &vertexShaderSource, nullptr);
+        glCompileShader(vertexShader);
+
+        // Check for vertex shader compilation errors
+        int success;
+        char infoLog[512];
+        glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+        if (!success)
+        {
+            glGetShaderInfoLog(vertexShader, 512, nullptr, infoLog);
+            std::cerr << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+        }
+
+        // Fragment shader
+        fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+        glShaderSource(fragmentShader, 1, &fragmentShaderSource, nullptr);
+        glCompileShader(fragmentShader);
+
+        // Check for fragment shader compilation errors
+        glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+        if (!success)
+        {
+            glGetShaderInfoLog(fragmentShader, 512, nullptr, infoLog);
+            std::cerr << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+        }
+
+        // Shader program
+        shaderProgram = glCreateProgram();
+        glAttachShader(shaderProgram, vertexShader);
+        glAttachShader(shaderProgram, fragmentShader);
+        glLinkProgram(shaderProgram);
+
+        // Check for shader linking errors
+        glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+        if (!success)
+        {
+            glGetProgramInfoLog(shaderProgram, 512, nullptr, infoLog);
+            std::cerr << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+        }
+
+        // Delete shaders as they're linked into our program now and no longer necessary
+        glDeleteShader(vertexShader);
+        glDeleteShader(fragmentShader);
+
+        // Render loop
+        while (!glfwWindowShouldClose(window))
+        {
+            // Process user input
+            processInput(window);
+
+            // Clear the screen
+            glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            // Use our shader program
+            glUseProgram(shaderProgram);
+
+            // Draw the function using the VAO
+            glBindVertexArray(VAO);
+            glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
+
+            // Swap the front and back buffers
+            glfwSwapBuffers(window);
+
+            // Poll for and process events
+            glfwPollEvents();
+        }
+
+        // Clean up
+        glDeleteVertexArrays(1, &VAO);
+        glDeleteBuffers(1, &VBO);
+
+        glfwTerminate();
+    
+	}
 
 int main()
 {
@@ -176,6 +350,8 @@ int main()
 
     printNewton(par, lower_bound, upper_bound); //print out the root and iterations
 
+    auto vertices = createFunction(5, -2, outputFileName);
+
     /*ofstream updateFile(outputFileName, ios::in | ios::out);
     if (updateFile.is_open())
     {
@@ -188,30 +364,16 @@ int main()
         cerr << "Error unable to update file" << endl;
     }*/
 
+
+    drawFunction(vertices);
+
     return 0;
 
-    //if (!glfwInit())
-    //    return -1;
-    //glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    //glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    //GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Graph window", NULL, NULL);
-    //if (window == NULL)
-    //{
-    //    std::cout << "Failed to create the GLFW window" << std::endl;
-    //    glfwTerminate();
-    //    return -1;
-    //}
-
+    
+   
     //glfwMakeContextCurrent(window);
     //glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-    //if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-    //{
-    //    std::cout << "Failed to initialize GLAD" << std::endl;
-    //    return -1;
-    //}
 
     //unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
     //glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
@@ -302,13 +464,4 @@ int main()
 
 }
 
-//void processInput(GLFWwindow* window)
-//{
-//    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-//        glfwSetWindowShouldClose(window, true);
-//}
-//void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-//{
-//    glViewport(0, 0, width, height);
-//    std::cout << "Window resized with width " << width << " and height " << height << std::endl;
-//}
+
