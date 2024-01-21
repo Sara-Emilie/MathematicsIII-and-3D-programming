@@ -1,0 +1,4 @@
+﻿  Newtons Metode.cpp
+C:\Users\feeli\Desktop\Semester 4\Matte 3\Newtons Metode\Newtons Metode\Newtons Metode.cpp(84,5): error C2601: 'main': local function definitions are illegal
+C:\Users\feeli\Desktop\Semester 4\Matte 3\Newtons Metode\Newtons Metode\Newtons Metode.cpp(61,60): message : this line contains a '{' which has not yet been matched
+C:\Users\feeli\Desktop\Semester 4\Matte 3\Newtons Metode\Newtons Metode\Newtons Metode.cpp(61,60): fatal  error C1075: '{': no matching token found
