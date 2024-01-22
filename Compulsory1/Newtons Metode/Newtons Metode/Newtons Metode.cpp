@@ -116,9 +116,8 @@ void printNewton(pair<double, int> par, double lower_bound, double upper_bound)
 
         
         for (int i = start; i < iterations; i++) {
-            //float x = i * n;
-
-            //float y = x * x;
+            //x = i * n
+            //y = x * x
 
             x1 = i * n;
             y1 = x1 * x1 - 2;
@@ -130,13 +129,15 @@ void printNewton(pair<double, int> par, double lower_bound, double upper_bound)
             Vertex.x = x1;
             Vertex.y = y1;
 
-            if (y1 > y0) {
-                //rising
+            if (y1 > y0) 
+            {
+                //graph is rising
                 Vertex.r = 0.0f;
                 Vertex.g = 1.0f;
             }
-            else {
-                //decreasing
+            else 
+            {
+                //graph is decreasing
                 Vertex.r = 1.0f;
                 Vertex.g = 0.0;
             }
@@ -217,15 +218,18 @@ void printNewton(pair<double, int> par, double lower_bound, double upper_bound)
         glBindVertexArray(VAO);
 
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(vertex), vertices.data(), GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+
+
 
         // Position attribute
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float), (void*)0);
         glEnableVertexAttribArray(0);
 
         // Color attribute
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)(3 * sizeof(float)));
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float), (void*)(3 * sizeof(float)));
         glEnableVertexAttribArray(1);
+
 
         // Unbind VAO
         glBindVertexArray(0);
@@ -290,10 +294,7 @@ void printNewton(pair<double, int> par, double lower_bound, double upper_bound)
             glGetProgramInfoLog(shaderProgram, 512, nullptr, infoLog);
             std::cerr << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
         }
-
-        // Delete shaders as they're linked into our program now and no longer necessary
-        glDeleteShader(vertexShader);
-        glDeleteShader(fragmentShader);
+       
 
         // Render loop
         while (!glfwWindowShouldClose(window))
@@ -310,7 +311,8 @@ void printNewton(pair<double, int> par, double lower_bound, double upper_bound)
 
             // Draw the function using the VAO
             glBindVertexArray(VAO);
-            glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
+            //glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
+            glDrawElements(GL_LINES, vertices.size(), GL_UNSIGNED_INT, 0);
 
             // Swap the front and back buffers
             glfwSwapBuffers(window);
@@ -318,6 +320,10 @@ void printNewton(pair<double, int> par, double lower_bound, double upper_bound)
             // Poll for and process events
             glfwPollEvents();
         }
+
+        // Delete shaders as they're linked into our program now and no longer necessary
+        glDeleteShader(vertexShader);
+        glDeleteShader(fragmentShader);
 
         // Clean up
         glDeleteVertexArrays(1, &VAO);
@@ -329,6 +335,8 @@ void printNewton(pair<double, int> par, double lower_bound, double upper_bound)
 
 int main()
 {
+    cout << sizeof(vertex) << endl;
+
 	/*auto par = newton(1);
 	cout << "Root: " << par.first << ", Iterations: " << par.second << endl;*/
 
