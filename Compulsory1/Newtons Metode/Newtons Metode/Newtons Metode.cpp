@@ -55,6 +55,11 @@ struct vertex
     float x, y, z, r, g, b, u, v; //I'm only using x,y and r,g 
 };
 
+GLuint indices[] =
+{
+    0, 1, 2, 3, 4, 5, 6, 7
+};
+
 void writeToFile(const char* fileName, /*double x, double y, float r, float g*/ const vector<vertex>& vertices)
 {
    

@@ -13,6 +13,22 @@ const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
 
+////vertex shader source 
+//const char* vertexShaderSource = "#version 330 core\n"
+//"layout (location = 0) in vec3 aPos;\n"
+//"void main()\n"
+//"{\n"
+//"gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+//"}\0";
+//
+////fragment shader source
+//const char* fragmentShaderSource = "#version 330 core\n"
+//"out vec4 FragColor;\n"
+//"void main()\n"
+//"{\n"
+//"FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+//"}\0";
+
 //vertex shader source 
 const char* vertexShaderSource = "#version 330 core\n"
 "layout (location = 0) in vec3 aPos;\n"
@@ -24,10 +40,14 @@ const char* vertexShaderSource = "#version 330 core\n"
 //fragment shader source
 const char* fragmentShaderSource = "#version 330 core\n"
 "out vec4 FragColor;\n"
+"uniform vec4 ourColor;\n"
 "void main()\n"
 "{\n"
-"FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-"}\0";
+"FragColor = ourColor;\n"
+"}\n\0";
+
+//uniform vec4 ourColor; // we set this variable in the OpenGL code.
+
 
 
 int main(void)
@@ -96,6 +116,7 @@ int main(void)
 	glAttachShader(shaderProgram, fragmentShader);
 	glLinkProgram(shaderProgram);
 
+
 	// check for linking errors
 	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
 	if (!success) {
@@ -145,7 +166,9 @@ int main(void)
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
-	glUseProgram(shaderProgram);
+	//glUseProgram(shaderProgram);
+
+
 	glBindVertexArray(VAO);
 	glBindVertexArray(0);
 
@@ -162,6 +185,7 @@ int main(void)
 	// -----------
 	while (!glfwWindowShouldClose(window))
 	{
+
 		// input
 		// -----
 		processInput(window);
@@ -173,6 +197,17 @@ int main(void)
 
 		// draw our first triangle
 		glUseProgram(shaderProgram);
+
+		float timeValue = glfwGetTime();
+		float greenValue = (sin(timeValue) / 1.0f) + 0.5f;
+		float redValue = (sin(timeValue) / 3.0f) + 0.5f;
+		float blueValue = (sin(timeValue) / 2.0f) + 0.5f;
+		int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
+		glUniform4f(vertexColorLocation, redValue, greenValue, blueValue, 1.0f);
+
+
+		
+
 		glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		//glDrawArrays(GL_TRIANGLES, 0, 3);
