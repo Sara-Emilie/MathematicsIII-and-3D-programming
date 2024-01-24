@@ -10,6 +10,36 @@
 #include <cmath>
 using namespace std;
 
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void processInput(GLFWwindow* window);
+
+// screen settings
+const unsigned int SCR_WIDTH = 800;
+const unsigned int SCR_HEIGHT = 600;
+
+//vertex shader source 
+const char* vertexShaderSource = "#version 330 core\n"
+"layout (location = 0) in vec3 aPos;\n" // x, y, y_next
+"out vec3 dataOut;\n" // Pass y and y_next
+"void main()\n"
+"{\n"
+"   gl_Position = vec4(aPos.x, aPos.y, 0.0, 1.0);\n"
+"   dataOut = aPos;\n" // Pass y and y_next
+"}\0";
+
+
+// fragmenet shader source 
+const char* fragmentShaderSource = "#version 330 core\n"
+"in vec3 dataOut;\n" // y, y_next
+"out vec4 FragColor;\n"
+"void main()\n"
+"{\n"
+"   if (dataOut.z > dataOut.y)\n" // Compare y_next with y
+"       FragColor = vec4(0.0, 1.0, 0.0, 1.0); // Green\n"
+"   else\n"
+"       FragColor = vec4(1.0, 0.0, 0.0, 1.0); // Red\n"
+"}\n\0";
+
 // WRITE TO FILE
 void outputFile(double x, double y, double derivative, string n)
 {
@@ -64,7 +94,7 @@ struct vertex
 
 
 //main function
-void dataPoints(double x0, double lower_bound, double upper_bound, int iter) 
+vector<vertex> dataPoints(double x0, double lower_bound, double upper_bound, int iter)
 {
     double h = (upper_bound - lower_bound) / iter; // Calculate the step size
 	double x = x0;
@@ -140,8 +170,14 @@ void dataPoints(double x0, double lower_bound, double upper_bound, int iter)
 		y_next = f(x + h);
 	}
 
+    return openGLvertices, vertices;
 }
 
+void drawFunction(vector<vertex> Graph)
+{
+    // glfw: initialize and configure
+
+}
 
 int main()
 {
@@ -153,8 +189,8 @@ int main()
    double x0 = lower_bound;
 
    numberOfoints(iter);
-   dataPoints(x0, lower_bound, upper_bound, iter);
-
+   vector<vertex>openGLvertex, vertex = dataPoints(x0, lower_bound, upper_bound, iter);
+   drawFunction(openGLvertex);
 }
 
 
