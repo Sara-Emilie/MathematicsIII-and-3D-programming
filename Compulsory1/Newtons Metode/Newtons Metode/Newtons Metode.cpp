@@ -149,11 +149,14 @@ void printNewton(pair<double, int> par, double lower_bound, double upper_bound)
             mVertices.push_back(Vertex);
             //writeToFile(filename, Vertex.x, Vertex.y, Vertex.r, Vertex.g);
             writeToFile(filename, mVertices);
-            cout << "X = " << Vertex.x << " " << "Y = " << Vertex.y << "The derivate: " << y2 << endl;
+            cout << " X = " << Vertex.x << " " << " Y = " << Vertex.y << " The derivate: " << y2 << endl;
+
+            
 
         }
         return mVertices;
     };
+
 
     void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     {
