@@ -1,0 +1,14 @@
+﻿  Task 1.cpp
+C:\Users\selau\Desktop\Matte 3\MathematicsIII-and-3D-programming\Compulsory1\Task 1\Task 1\Task 1\Task 1.cpp(122,24): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\selau\Desktop\Matte 3\MathematicsIII-and-3D-programming\Compulsory1\Task 1\Task 1\Task 1\Task 1.cpp(123,24): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\selau\Desktop\Matte 3\MathematicsIII-and-3D-programming\Compulsory1\Task 1\Task 1\Task 1\Task 1.cpp(127,26): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\selau\Desktop\Matte 3\MathematicsIII-and-3D-programming\Compulsory1\Task 1\Task 1\Task 1\Task 1.cpp(128,26): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\selau\Desktop\Matte 3\MathematicsIII-and-3D-programming\Compulsory1\Task 1\Task 1\Task 1\Task 1.cpp(141,24): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\selau\Desktop\Matte 3\MathematicsIII-and-3D-programming\Compulsory1\Task 1\Task 1\Task 1\Task 1.cpp(142,24): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\selau\Desktop\Matte 3\MathematicsIII-and-3D-programming\Compulsory1\Task 1\Task 1\Task 1\Task 1.cpp(145,26): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\selau\Desktop\Matte 3\MathematicsIII-and-3D-programming\Compulsory1\Task 1\Task 1\Task 1\Task 1.cpp(146,26): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\selau\Desktop\Matte 3\MathematicsIII-and-3D-programming\Compulsory1\Task 1\Task 1\Task 1\Task 1.cpp(159,15): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\selau\Desktop\Matte 3\MathematicsIII-and-3D-programming\Compulsory1\Task 1\Task 1\Task 1\Task 1.cpp(160,15): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\selau\Desktop\Matte 3\MathematicsIII-and-3D-programming\Compulsory1\Task 1\Task 1\Task 1\Task 1.cpp(163,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\selau\Desktop\Matte 3\MathematicsIII-and-3D-programming\Compulsory1\Task 1\Task 1\Task 1\Task 1.cpp(164,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  Task 1.vcxproj -> C:\Users\selau\Desktop\Matte 3\MathematicsIII-and-3D-programming\Compulsory1\Task 1\Task 1\x64\Debug\Task 1.exe

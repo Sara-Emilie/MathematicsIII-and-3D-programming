@@ -1,4 +1,0 @@
-﻿  Newtons Metode.cpp
-C:\Users\feeli\Desktop\Semester 4\MathematicsIII\Compulsory1\Newtons Metode\Newtons Metode\Newtons Metode.cpp(321,51): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
-LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
-  Newtons Metode.vcxproj -> C:\Users\feeli\Desktop\Semester 4\MathematicsIII\Compulsory1\Newtons Metode\x64\Debug\Newtons Metode.exe
