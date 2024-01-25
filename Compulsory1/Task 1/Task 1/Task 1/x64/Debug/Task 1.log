@@ -1,10 +1,9 @@
 ﻿  Task 1.cpp
-C:\Users\selau\Desktop\Matte 3\MathematicsIII-and-3D-programming\Compulsory1\Task 1\Task 1\Task 1\Task 1.cpp(150,26): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\selau\Desktop\Matte 3\MathematicsIII-and-3D-programming\Compulsory1\Task 1\Task 1\Task 1\Task 1.cpp(151,26): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\selau\Desktop\Matte 3\MathematicsIII-and-3D-programming\Compulsory1\Task 1\Task 1\Task 1\Task 1.cpp(168,26): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\selau\Desktop\Matte 3\MathematicsIII-and-3D-programming\Compulsory1\Task 1\Task 1\Task 1\Task 1.cpp(169,26): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\selau\Desktop\Matte 3\MathematicsIII-and-3D-programming\Compulsory1\Task 1\Task 1\Task 1\Task 1.cpp(186,17): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\selau\Desktop\Matte 3\MathematicsIII-and-3D-programming\Compulsory1\Task 1\Task 1\Task 1\Task 1.cpp(187,17): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\selau\Desktop\Matte 3\MathematicsIII-and-3D-programming\Compulsory1\Task 1\Task 1\Task 1\Task 1.cpp(331,53): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
-LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+C:\Users\selau\Desktop\Matte 3\MathematicsIII-and-3D-programming\Compulsory1\Task 1\Task 1\Task 1\Task 1.cpp(144,26): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\selau\Desktop\Matte 3\MathematicsIII-and-3D-programming\Compulsory1\Task 1\Task 1\Task 1\Task 1.cpp(145,26): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\selau\Desktop\Matte 3\MathematicsIII-and-3D-programming\Compulsory1\Task 1\Task 1\Task 1\Task 1.cpp(162,26): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\selau\Desktop\Matte 3\MathematicsIII-and-3D-programming\Compulsory1\Task 1\Task 1\Task 1\Task 1.cpp(163,26): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\selau\Desktop\Matte 3\MathematicsIII-and-3D-programming\Compulsory1\Task 1\Task 1\Task 1\Task 1.cpp(180,17): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\selau\Desktop\Matte 3\MathematicsIII-and-3D-programming\Compulsory1\Task 1\Task 1\Task 1\Task 1.cpp(181,17): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\selau\Desktop\Matte 3\MathematicsIII-and-3D-programming\Compulsory1\Task 1\Task 1\Task 1\Task 1.cpp(320,53): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
   Task 1.vcxproj -> C:\Users\selau\Desktop\Matte 3\MathematicsIII-and-3D-programming\Compulsory1\Task 1\Task 1\x64\Debug\Task 1.exe

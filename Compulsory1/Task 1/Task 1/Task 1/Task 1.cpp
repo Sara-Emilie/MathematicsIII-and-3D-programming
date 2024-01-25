@@ -22,16 +22,10 @@ const char* vertexShaderSource = "#version 330 core\n"
 "layout (location = 0) in vec2 aPos;\n" // x, y
 "layout (location = 1) in vec3 color;\n" // r, g, b
 "out vec3 fragColor;\n" // Pass color directly to the fragment shader
-"uniform float prevY;\n" // Uniform to store the previous y value
 "void main()\n"
 "{\n"
 "   gl_Position = vec4(aPos.x, aPos.y, 0.0, 1.0);\n"
-"   if (aPos.y > prevY)\n"
-"       fragColor = color; // Green\n"
-"   else if (aPos.y == prevY)\n"
-"       fragColor = color; // White\n"
-"   else\n"
-"       fragColor = color; // Red\n"
+"   fragColor = color;\n" // Use the color directly from the input attribute
 "}\0";
 
 const char* fragmentShaderSource = "#version 330 core\n"
@@ -307,22 +301,17 @@ void drawFunction(vector<vertex> vertices)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-    float prevY = 0.0f;  // Initialize prevY
-
-
     while (!glfwWindowShouldClose(window))
     {
         // Process input
         processInput(window);
 
         // Clear the color buffer
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClearColor(0.05f, 0.05f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+
         // Use the shader program
         glUseProgram(shaderProgram);
-
-        // Update prevY in the vertex shader
-        glUniform1f(glGetUniformLocation(shaderProgram, "prevY"), prevY);
 
         // Bind the VAO
         glBindVertexArray(VAO);
@@ -332,17 +321,14 @@ void drawFunction(vector<vertex> vertices)
 
         // Unbind the VAO
         glBindVertexArray(0);
-
         // Swap the front and back buffers
+
         glfwSwapBuffers(window);
 
         // Poll for and process events
         glfwPollEvents();
 
-        // Update prevY for the next iteration
-        if (!vertices.empty()) {
-            prevY = vertices.back().y;
-        }
+    
     }
 
     // clean up resources after the rendering loop
