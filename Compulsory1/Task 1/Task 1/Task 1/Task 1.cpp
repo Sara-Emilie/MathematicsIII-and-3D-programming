@@ -34,13 +34,12 @@ const char* vertexShaderSource = "#version 330 core\n"
 "       fragColor = color; // Red\n"
 "}\0";
 
-// Modify the fragment shader source
 const char* fragmentShaderSource = "#version 330 core\n"
-"in vec3 color;\n" // Use color from vertex shader
-"out vec4 FragColor;\n"
+"in vec3 fragColor;\n" // Interpolated color from vertex shader
+"out vec4 finalColor;\n"
 "void main()\n"
 "{\n"
-"   FragColor = vec4(color, 1.0);\n"
+"   finalColor = vec4(fragColor, 1.0);\n"
 "}\n\0";
 
 
