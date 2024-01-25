@@ -8,6 +8,8 @@
 #include <GLFW/glfw3.h>
 #include <vector>
 #include <cmath>
+
+
 using namespace std;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -18,6 +20,7 @@ void processInput(GLFWwindow* window);
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
+//Vertex shader source code
 const char* vertexShaderSource = "#version 330 core\n"
 "layout (location = 0) in vec2 aPos;\n" // x, y
 "layout (location = 1) in vec3 color;\n" // r, g, b
@@ -28,6 +31,7 @@ const char* vertexShaderSource = "#version 330 core\n"
 "   fragColor = color;\n" // Use the color directly from the input attribute
 "}\0";
 
+//Fragment shader source code
 const char* fragmentShaderSource = "#version 330 core\n"
 "in vec3 fragColor;\n" // Interpolated color from vertex shader
 "out vec4 finalColor;\n"
@@ -36,9 +40,7 @@ const char* fragmentShaderSource = "#version 330 core\n"
 "   finalColor = vec4(fragColor, 1.0);\n"
 "}\n\0";
 
-
-
-
+// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 void processInput(GLFWwindow* window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -91,9 +93,9 @@ void numberOfoints(int iter)
 }
 
 //Function
-double f(double x) //f(x) = x^2 - 2
+double f(double x) //f(x)=sin(2*sin(2*sin(2*sin(x))))
 {
-    return pow(x, 2) - 2;
+    return  std::sin(2 * std::sin(2 * std::sin(2 * std::sin(x))));
 }
 
 
@@ -112,7 +114,7 @@ struct vertex
 };
 
 
-//main function
+// function to make datapoints
 vector<vertex> dataPoints(double x0, double lower_bound, double upper_bound, int iter)
 {
     double h = (upper_bound - lower_bound) / iter; // Calculate the step size
@@ -188,6 +190,8 @@ vector<vertex> dataPoints(double x0, double lower_bound, double upper_bound, int
 		y_next = f(x + h);
 	}
 
+
+   
     return openGLvertices; //, vertices ;
 }
 
@@ -294,7 +298,7 @@ void drawFunction(vector<vertex> vertices)
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)0);  // x, y
     glEnableVertexAttribArray(0);
 
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)(2 * sizeof(GLfloat)));  // r, g, b
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)(3 * sizeof(GLfloat)));  // r, g, b
     glEnableVertexAttribArray(1);
 
     // Unbind VAO and VBO
@@ -340,9 +344,9 @@ void drawFunction(vector<vertex> vertices)
 int main()
 {
 
-   double lower_bound = -2;
-   double upper_bound = 2;
-   int iter = 100;
+   double lower_bound = -10;
+   double upper_bound = 10;
+   int iter = 1000;
 
    double x0 = lower_bound;
 
@@ -350,7 +354,6 @@ int main()
    vector<vertex>openGLvertex = dataPoints(x0, lower_bound, upper_bound, iter);
    drawFunction(openGLvertex);
 }
-
 
 
 
