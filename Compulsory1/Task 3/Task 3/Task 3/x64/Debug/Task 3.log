@@ -1,5 +1,6 @@
 ﻿  Task 3.cpp
 C:\Users\feeli\Desktop\Semester 4\MathematicsIII\Compulsory1\Task 3\Task 3\Task 3\Task 3.cpp(248,21): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 C:\Users\feeli\Desktop\Semester 4\MathematicsIII\Compulsory1\Task 3\Task 3\Task 3\Task 3.cpp(255,53): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+  LINK : C:\Users\feeli\Desktop\Semester 4\MathematicsIII\Compulsory1\Task 3\Task 3\x64\Debug\Task 3.exe not found or not built by the last incremental link; performing full link
 LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
   Task 3.vcxproj -> C:\Users\feeli\Desktop\Semester 4\MathematicsIII\Compulsory1\Task 3\Task 3\x64\Debug\Task 3.exe

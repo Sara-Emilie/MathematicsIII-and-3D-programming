@@ -251,7 +251,7 @@ void drawFunction(const char* fileName) {
 
         glLineWidth(3.0f);
 
-        // draw the spiral
+        // draw the graph
         glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
 
         // unbind VAO
