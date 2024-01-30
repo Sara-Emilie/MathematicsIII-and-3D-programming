@@ -97,7 +97,6 @@ void writeSpiralDataToFile(const char* fileName, int numPoints) {
         double z = pitch * i / pointsPerTurn;
 
 
-        // Use your color logic here
         GLfloat r = 1.0f;
         GLfloat g = 0.0f;
         GLfloat b = 0.0f;
