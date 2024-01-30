@@ -124,7 +124,6 @@ vector<vertex> dataPoints(double x0, double lower_bound, double upper_bound, int
 	double y_next = f(x + h);
 
     vertex Vertex;
-    //vector<vertex> vertices; //removes this for now because it's not really needed 
     vector<vertex> openGLvertices; //all points are divided by 5 to fit in the screen
 
     for (int i = 0; i < iter; i++)
@@ -139,9 +138,6 @@ vector<vertex> dataPoints(double x0, double lower_bound, double upper_bound, int
             Vertex.g = 1.0f;
             Vertex.b = 0.0f;
 
-            //Vertex.x = x;
-            //Vertex.y = y;
-            //vertices.push_back(Vertex);
 
             Vertex.x = x /5;
             Vertex.y = y /5;
@@ -157,10 +153,6 @@ vector<vertex> dataPoints(double x0, double lower_bound, double upper_bound, int
             Vertex.g = 1.0f;
             Vertex.b = 1.0f;
 
-            //Vertex.x = x;
-            //Vertex.y = y;
-            //vertices.push_back(Vertex);
-
             Vertex.x = x / 5;
             Vertex.y = y / 5;
             openGLvertices.push_back(Vertex);
@@ -174,10 +166,6 @@ vector<vertex> dataPoints(double x0, double lower_bound, double upper_bound, int
             Vertex.r = 1.0f;
 			Vertex.g = 0.0f;
 			Vertex.b = 0.0f;
-
-			//Vertex.x = x;
-			//Vertex.y = y;
-			//vertices.push_back(Vertex);
 
 			Vertex.x = x / 5;
 			Vertex.y = y / 5;
@@ -349,7 +337,7 @@ int main()
 
    double lower_bound = -10;
    double upper_bound = 10;
-   int iter = 1000;
+   int iter = 100;
 
    double x0 = lower_bound;
 

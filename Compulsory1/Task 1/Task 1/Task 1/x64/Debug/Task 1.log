@@ -1,9 +1,1 @@
-﻿  Task 1.cpp
-C:\Users\feeli\Desktop\Semester 4\MathematicsIII\Compulsory1\Task 1\Task 1\Task 1\Task 1.cpp(146,26): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\feeli\Desktop\Semester 4\MathematicsIII\Compulsory1\Task 1\Task 1\Task 1\Task 1.cpp(147,26): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\feeli\Desktop\Semester 4\MathematicsIII\Compulsory1\Task 1\Task 1\Task 1\Task 1.cpp(164,26): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\feeli\Desktop\Semester 4\MathematicsIII\Compulsory1\Task 1\Task 1\Task 1\Task 1.cpp(165,26): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\feeli\Desktop\Semester 4\MathematicsIII\Compulsory1\Task 1\Task 1\Task 1\Task 1.cpp(182,17): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\feeli\Desktop\Semester 4\MathematicsIII\Compulsory1\Task 1\Task 1\Task 1\Task 1.cpp(183,17): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\feeli\Desktop\Semester 4\MathematicsIII\Compulsory1\Task 1\Task 1\Task 1\Task 1.cpp(325,53): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
-  Task 1.vcxproj -> C:\Users\feeli\Desktop\Semester 4\MathematicsIII\Compulsory1\Task 1\Task 1\x64\Debug\Task 1.exe
+﻿  Task 1.vcxproj -> C:\Users\feeli\Desktop\Semester 4\MathematicsIII\Compulsory1\Task 1\Task 1\x64\Debug\Task 1.exe

@@ -13,6 +13,7 @@
 #include <vector>
 #include <cmath>
 #include <cstddef>
+#include <string>
 
 using namespace std;
 
@@ -89,6 +90,8 @@ void writeSpiralDataToFile(const char* fileName, int numPoints) {
     const double initialRadius = 0.1;
     const double pitch = 0.06;
 
+    outputFile << "Number of Lines: " << numPoints << std::endl;
+
     for (int i = 0; i < numPoints; ++i) {
         double radius = initialRadius + 0.0005 * i;
         double theta = 2.0 * pi * i / pointsPerTurn;
@@ -118,6 +121,9 @@ void drawSpiral(const char* fileName) {
         cerr << "Unable to open file: " << fileName << endl;
         return;
     }
+
+    string firstLine;
+    std::getline(inputFile, firstLine);
 
     char comma;
 
@@ -250,7 +256,7 @@ void drawSpiral(const char* fileName) {
             // bind VAO
             glBindVertexArray(VAO);
 
-            // apply rotation around the z-axis
+            // apply rotation 
             float angle = glfwGetTime(); // time-based rotation
             glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), angle, glm::vec3(1.0f, 0.5f, 0.5f));
             glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(rotation));

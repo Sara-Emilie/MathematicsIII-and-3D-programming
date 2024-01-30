@@ -12,6 +12,7 @@
 #include <vector>
 #include <cmath>
 #include <cstddef>
+#include <string>
 using namespace std;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -81,6 +82,8 @@ void writeFunctionDataToFile(const char* fileName, int numPoints, float min, flo
         return;
     }
 
+    outputFile << "Number of Lines: " << numPoints << std::endl;
+
     for(float i= 0; i< numPoints ; i++)
     {
 	    for(float j = 0; j< numPoints ; j++)
@@ -111,6 +114,10 @@ void drawFunction(const char* fileName) {
         cerr << "Unable to open file: " << fileName << endl;
         return;
     }
+
+    string firstLine;
+    std::getline(inputFile, firstLine);
+
 
     char comma;
 
