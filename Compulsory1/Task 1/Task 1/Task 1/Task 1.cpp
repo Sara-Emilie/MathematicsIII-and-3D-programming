@@ -305,6 +305,7 @@ void drawFunction(vector<vertex> vertices)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
+    // Render loop
     while (!glfwWindowShouldClose(window))
     {
         // Process input
@@ -338,6 +339,8 @@ void drawFunction(vector<vertex> vertices)
     // clean up resources after the rendering loop
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
+
+    glfwTerminate();
 
 }
 

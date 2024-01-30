@@ -1,0 +1,4 @@
+﻿  Task2GLM.cpp
+C:\Users\feeli\Desktop\Semester 4\MathematicsIII\Compulsory1\Task 2 -fixed\Task2GLM\Task2GLM\Task2GLM.cpp(260,53): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+  Task2GLM.vcxproj -> C:\Users\feeli\Desktop\Semester 4\MathematicsIII\Compulsory1\Task 2 -fixed\Task2GLM\x64\Debug\Task2GLM.exe

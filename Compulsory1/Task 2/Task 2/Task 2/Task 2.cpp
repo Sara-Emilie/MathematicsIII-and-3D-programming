@@ -5,6 +5,9 @@
 #include <fstream>
 #include <iomanip>
 #include <glad/glad.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <GLFW/glfw3.h>
 #include <vector>
 #include <cmath>
@@ -23,13 +26,25 @@ void processInput(GLFWwindow* window);
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
+//const char* vertexShaderSource = "#version 330 core\n"
+//"layout (location = 0) in vec3 aPos;\n"
+//"layout (location = 1) in vec3 color;\n"
+//"out vec3 fragColor;\n"
+//"void main()\n"
+//"{\n"
+//"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+//"   fragColor = color;\n"
+//"}\0";
+
+
 const char* vertexShaderSource = "#version 330 core\n"
 "layout (location = 0) in vec3 aPos;\n"
 "layout (location = 1) in vec3 color;\n"
+"uniform mat4 model; // model matrix\n"
 "out vec3 fragColor;\n"
 "void main()\n"
 "{\n"
-"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+"   gl_Position = model * vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
 "   fragColor = color;\n"
 "}\0";
 
@@ -62,6 +77,13 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 }
 
 
+
+struct Vertex
+{
+    GLfloat x, y, z, r, g, b; // not using u and v for now
+};
+
+
 void writeSpiralDataToFile(const char* fileName, int numPoints) {
     std::ofstream outputFile(fileName);
     if (!outputFile.is_open()) {
@@ -70,19 +92,21 @@ void writeSpiralDataToFile(const char* fileName, int numPoints) {
     }
 
     const double pi = 3.14159265358979323846;
-    const double step = 0.1; // Adjust the step length as needed
-    const double heightScale = 0.1; // Adjust the height scale as needed
+    const double pointsPerTurn = 100.0;
+    const double radius = 0.5;
+    const double pitch = 0.01;
 
     for (int i = 0; i < numPoints; ++i) {
-        double t = step * i;
-        double x = cos(t);
-        double y = sin(t);
-        double z = heightScale * t;
+        double theta = 2.0 * pi * i / pointsPerTurn;
+        double x = radius * cos(theta);
+        double y = radius * sin(theta);
+        double z = pitch * i / pointsPerTurn;
+
 
         // Use your color logic here
-        GLfloat r = static_cast<GLfloat>(std::sin(t));
-        GLfloat g = static_cast<GLfloat>(std::cos(t));
-        GLfloat b = static_cast<GLfloat>(std::abs(std::sin(t * 2.0)));
+    	GLfloat r = 1.0f;
+        GLfloat g= 0.0f;
+        GLfloat b= 0.0f;
 
         outputFile << std::fixed << std::setprecision(3);
         outputFile << x << ", " << y << ", " << z << ", " << r << ", " << g << ", " << b << std::endl;
@@ -91,15 +115,11 @@ void writeSpiralDataToFile(const char* fileName, int numPoints) {
     outputFile.close();
 }
 
-struct Vertex
-{
-    GLfloat x, y, z, r, g, b, u, v; //I'm only using x,y,z and r,g,b
-};
-
 
 void drawSpiral(const char* fileName) {
     vector<Vertex> vertices;
 
+    // Read the data from the file //
     ifstream inputFile(fileName);
     if (!inputFile.is_open()) {
         cerr << "Unable to open file: " << fileName << endl;
@@ -109,11 +129,14 @@ void drawSpiral(const char* fileName) {
     char comma;
 
     Vertex vertex;
-    while (inputFile >> vertex.x >> comma >> vertex.y >> comma >> vertex.z >> comma >> vertex.r >> comma >> vertex.g >> comma >> vertex.b >> comma >> vertex.u >> comma>> vertex.v) {
+    while (inputFile >> vertex.x >> comma >> vertex.y >> comma >> vertex.z >> comma >> vertex.r >> comma >> vertex.g >> comma >> vertex.b) {
         vertices.push_back(vertex);
     }
 
     inputFile.close();
+    
+    ///////////////////////////////////////////////////////////////////////
+
 
     // glfw: initialize
     if (!glfwInit()) {
@@ -121,10 +144,12 @@ void drawSpiral(const char* fileName) {
         return;
     }
 
+    // set version and core profile
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+    // create window
     GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Spiral", NULL, NULL);
     if (window == NULL) {
         std::cout << "Failed to create the GLFW window" << std::endl;
@@ -135,15 +160,25 @@ void drawSpiral(const char* fileName) {
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
+
+    // glad: load all OpenGL function pointers
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         std::cout << "Failed to initialize GLAD" << std::endl;
         return;
     }
 
+
+
+    /////////////////////////////////////////////////////////////////////////
+
+    // Build and compile our shader program //
+
+    // vertex shader
     unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
     glCompileShader(vertexShader);
 
+    // check for shader compile errors
     int success;
     char infoLog[512];
     glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
@@ -152,21 +187,25 @@ void drawSpiral(const char* fileName) {
         std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
     }
 
+    // fragment shader
     unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
     glCompileShader(fragmentShader);
 
+    // check for shader compile errors
     glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
     if (!success) {
         glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
         std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
     }
 
+    // link shaders
     unsigned int shaderProgram = glCreateProgram();
     glAttachShader(shaderProgram, vertexShader);
     glAttachShader(shaderProgram, fragmentShader);
     glLinkProgram(shaderProgram);
 
+    // check for linking errors
     glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
     if (!success) {
         glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
@@ -175,39 +214,92 @@ void drawSpiral(const char* fileName) {
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 
+    ///////////////////////////////////////////////////////////////////////////
+
+
+	// Create Vertex Buffer Object (VBO) and Vertex Array Object (VAO)
     unsigned int VBO, VAO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
 
+    // Bind VAO
     glBindVertexArray(VAO);
 
+    // Bind VBO
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)0);
+    // Set vertex attributes pointers
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
     glEnableVertexAttribArray(0);
 
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), reinterpret_cast<void*>(reinterpret_cast<size_t>(&reinterpret_cast<Vertex*>(0)->r)));
-
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(3 * sizeof(GLfloat)));
     glEnableVertexAttribArray(1);
 
+    // Unbind VAO and VBO
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
+    ////render loop
+    //while (!glfwWindowShouldClose(window)) {
+
+    //    // input
+    //    processInput(window);
+
+    //    //clear the color buffer
+    //    glClearColor(0.1f, 0.1f, 0.2f, 1.0f);
+    //    glClear(GL_COLOR_BUFFER_BIT);
+
+    //    //use shader program
+    //    glUseProgram(shaderProgram);
+
+    //    //bind VAO
+    //    glBindVertexArray(VAO);
+
+    //    //draw the spiral
+    //    glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
+
+    //    //unbind VAO
+    //    glBindVertexArray(0);
+
+    //    //swap buffers and poll IO events
+    //    glfwSwapBuffers(window);
+    //    glfwPollEvents();
+    //}
+
+    // render loop
     while (!glfwWindowShouldClose(window)) {
+
+        // input
         processInput(window);
 
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        // clear the color buffer
+        glClearColor(0.1f, 0.1f, 0.2f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        // use shader program
         glUseProgram(shaderProgram);
+
+        // bind VAO
         glBindVertexArray(VAO);
+
+        // apply rotation around the z-axis
+        float angle = glfwGetTime(); // time-based rotation
+        glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), angle, glm::vec3(0.0f, 0.0f, 1.0f));
+        glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(rotation));
+
+        // draw the spiral
         glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
 
+        // unbind VAO
+        glBindVertexArray(0);
+
+        // swap buffers and poll IO events
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
+    // clean up resources after the rendering loop
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
 
