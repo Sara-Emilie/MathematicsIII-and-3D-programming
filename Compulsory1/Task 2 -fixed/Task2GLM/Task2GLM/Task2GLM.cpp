@@ -7,8 +7,8 @@
 #include <iomanip>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
-//#include <glm/gtc/matrix_transform.hpp>
-//#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <GLFW/glfw3.h>
 #include <vector>
 #include <cmath>
@@ -27,26 +27,20 @@ void processInput(GLFWwindow* window);
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
+
 const char* vertexShaderSource = "#version 330 core\n"
 "layout (location = 0) in vec3 aPos;\n"
-"layout (location = 1) in vec3 color;\n"
+"uniform mat4 model; // model matrix\n"
 "out vec3 fragColor;\n"
 "void main()\n"
 "{\n"
-"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-"   fragColor = color;\n"
+"   gl_Position = model * vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+"   // Change color based on x, y, and z positions\n"
+"   float colorValueX = (aPos.x + 1.0) / 2.0; // Map x to [0, 1]\n"
+"   float colorValueY = (aPos.y + 1.0) / 2.0; // Map y to [0, 1]\n"
+"   float colorValueZ = (aPos.z + 1.0) / 2.0; // Map z to [0, 1]\n"
+"   fragColor = vec3(colorValueX, colorValueY, colorValueZ); // RGB based on x, y, z\n"
 "}\0";
-
-//
-//const char* vertexShaderSource = "#version 330 core\n"
-//"layout (location = 0) in vec3 aPos;\n"
-//"layout (location = 1) in vec3 color;\n"
-//"out vec3 fragColor;\n"
-//"void main()\n"
-//"{\n"
-//"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-//"   fragColor = color;\n"
-//"}\0";
 
 const char* fragmentShaderSource = "#version 330 core\n"
 "in vec3 fragColor;\n"
@@ -55,7 +49,6 @@ const char* fragmentShaderSource = "#version 330 core\n"
 "{\n"
 "   FragColor = vec4(fragColor, 1.0);\n"
 "}\n\0";
-
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 void processInput(GLFWwindow* window)
@@ -93,10 +86,11 @@ void writeSpiralDataToFile(const char* fileName, int numPoints) {
 
     const double pi = 3.14159265358979323846;
     const double pointsPerTurn = 100.0;
-    const double radius = 0.5;
-    const double pitch = 0.01;
+    const double initialRadius = 0.1;
+    const double pitch = 0.06;
 
     for (int i = 0; i < numPoints; ++i) {
+        double radius = initialRadius + 0.0005 * i;
         double theta = 2.0 * pi * i / pointsPerTurn;
         double x = radius * cos(theta);
         double y = radius * sin(theta);
@@ -240,60 +234,40 @@ void drawSpiral(const char* fileName) {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-    ////render loop
-    while (!glfwWindowShouldClose(window)) {
+    
+        // render loop
+        while (!glfwWindowShouldClose(window)) {
 
-        // input
-        processInput(window);
+            // input
+            processInput(window);
 
-        //clear the color buffer
-        glClearColor(0.1f, 0.1f, 0.2f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+            // clear the color buffer
+            glClearColor(0.1f, 0.1f, 0.2f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
 
-        //use shader program
-        glUseProgram(shaderProgram);
+            // use shader programs
+            glUseProgram(shaderProgram);
 
-        //bind VAO
-        glBindVertexArray(VAO);
+            // bind VAO
+            glBindVertexArray(VAO);
 
-        //draw the spiral
-        glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
+            // apply rotation around the z-axis
+            float angle = glfwGetTime(); // time-based rotation
+            glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), angle, glm::vec3(1.0f, 0.5f, 0.5f));
+            glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(rotation));
 
-        //unbind VAO
-        glBindVertexArray(0);
+            glLineWidth(3.0f);
 
-        //swap buffers and poll IO events
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-    }
+            // draw the spiral
+            glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
 
-    //// render loop
-    //while (!glfwWindowShouldClose(window)) {
+            // unbind VAO
+            glBindVertexArray(0);
 
-
-    //    // input
-    //    processInput(window);
-
-    //    //clear the color buffer
-    //    glClearColor(0.1f, 0.1f, 0.2f, 1.0f);
-    //    glClear(GL_COLOR_BUFFER_BIT);
-
-    //    //use shader program
-    //    glUseProgram(shaderProgram);
-
-    //    //bind VAO
-    //    glBindVertexArray(VAO);
-
-    //    //draw the spiral
-    //    glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
-
-    //    //unbind VAO
-    //    glBindVertexArray(0);
-
-    //    //swap buffers and poll IO events
-    //    glfwSwapBuffers(window);
-    //    glfwPollEvents();
-    //}
+            // swap buffers and poll IO events
+            glfwSwapBuffers(window);
+            glfwPollEvents();
+        }
 
     // clean up resources after the rendering loop
     glDeleteVertexArrays(1, &VAO);
