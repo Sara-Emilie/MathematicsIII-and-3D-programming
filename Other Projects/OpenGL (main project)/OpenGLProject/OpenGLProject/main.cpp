@@ -22,7 +22,7 @@
 #include "Shaders/EBO.h"
 #include "Camera.h"
 using namespace std;
-
+using namespace Eigen;
 
 
 // Window dimensions
@@ -88,45 +88,35 @@ void CreateCoordinateSystem(std::vector<Vertex>& vertices, float start, float it
 }
 
 
-Eigen::MatrixXd X_Matrix(8, 3);
-Eigen::MatrixXd Y_Matrix(8, 1);
 
-void CalculateParabola(std::vector<Vertex>& verticesParabola)
-{
-	X_Matrix << 1, 1, 1,
-		4, 2, 1,
-		9, 3, 1,
-		16, 4, 1,
-		25, 5, 1,
-		36, 6, 1,
-		49, 7, 1,
-		64, 8, 1;
+// Function to calculate cubic polynomial coefficients and evaluate the polynomial
+void CalculateCubicPoly(std::vector<Vertex>& verticesCubic) {
+	MatrixXd X_Matrix(4, 4);
+	MatrixXd Y_Matrix(4, 1);
 
-	Y_Matrix << 2,
-		3,
-		5,
-		6,
-		5,
+	X_Matrix <<
+		1, 1, 1, 1,
+		1.5 * 1.5 * 1.5, 1.5 * 1.5, 1.5, 1,
+		2.1 * 2.1 * 2.1, 2.1 * 2.1, 2.1, 1,
+		4 * 4 * 4, 4 * 4, 4, 1;
+
+	Y_Matrix <<
 		4,
-		3,
-		2;
+		0.8,
+		5.1,
+		0.6;
 
-	Eigen::MatrixXd A_Transpose = X_Matrix.transpose();
+	MatrixXd X_Matrix_Inverse = X_Matrix.inverse();
+	MatrixXd X_Matrix_Answer = X_Matrix_Inverse * Y_Matrix;
 
-	Eigen::MatrixXd B_Matrix = A_Transpose * X_Matrix;
-	Eigen::MatrixXd B_Inverse = B_Matrix.inverse();
-	Eigen::MatrixXd C_Matrix = A_Transpose * Y_Matrix;
-	Eigen::MatrixXd A_Matrix = B_Inverse * C_Matrix;
+	cout << "X_Matrix_Answer: " << X_Matrix_Answer << endl;
 
-	cout << "A_Matrix: " << A_Matrix << endl;
-
-	for (int i = 0; i < 8; i++)
-	{
-		float x = static_cast<float>(i);
-		float y = A_Matrix(0, 0) * x * x + A_Matrix(1, 0) * x + A_Matrix(2, 0);
+	// Evaluate the polynomial for x-values corresponding to the data points
+	for (double x : {1.0, 1.5, 2.1, 4.0}) {
+		double y = X_Matrix_Answer(0, 0) * x * x * x + X_Matrix_Answer(1, 0) * x * x + X_Matrix_Answer(2, 0) * x + X_Matrix_Answer(3, 0);
 
 		cout << "x: " << x << " y: " << y << endl;
-		verticesParabola.push_back(Vertex{ x / 10, y / 10, 0.0f, 1.0f, 1.0f, 0.0f });
+		verticesCubic.push_back(Vertex{ static_cast<float>(x) / 10, static_cast<float>(y) / 10, 0.0f, 1.0f, 1.0f, 0.0f });
 	}
 }
 
@@ -205,7 +195,7 @@ int main()
 	// Create vector to store vertices for the parabola
 	std::vector<Vertex> verticesParabola;
 	// Calculate parabola
-	CalculateParabola(verticesParabola);
+	CalculateCubicPoly(verticesParabola);
 
 	// Generates Shader object using shaders defualt.vert and default.frag
 	Shader shaderProgram("default.vert", "default.frag");
