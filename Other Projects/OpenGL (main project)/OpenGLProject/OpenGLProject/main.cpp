@@ -36,9 +36,14 @@ struct Vertex
 	//float pr, pg, pb;
 };
 
-unsigned int Indices[] = 
+unsigned int SquareIndices[] =
 {
+	0,1,2,
+	3,1,2
+};
 
+unsigned int CubeIndices[] = 
+{
 	0,1,2,  // Front face
 	3,1,2,
 
@@ -51,21 +56,12 @@ unsigned int Indices[] =
 	7,0,5, // Bottom face
 	1,5,0,
 
-	//7,2,0,  // Left face
-	//7,2,4,
-
-	2,7,0
-	,2,4,7,
+	2,7,0, // Left face
+	2,4,7,
 
 	5,3,1,  // Right face
 	5,3,6
-
-	
-
 };
-
-
-
 
 void CreateCoordinateSystem(std::vector<Vertex>& vertices, float start, float iterations) {
 	
@@ -117,45 +113,6 @@ void CreateCoordinateSystem(std::vector<Vertex>& vertices, float start, float it
 	}
 }
 
-
-
-void writeToFile(const char* fileName, double x, double y, double z, double r, double g, double b) {
-	std::ofstream outputFile(fileName, std::ios::app);  // Open the file in append mode
-	if (outputFile.is_open()) {
-		outputFile << std::fixed << std::setprecision(3);
-		outputFile << x << " , " << y << " , " << z << " , " << r << " , " << g << " , " << b;
-
-
-	}
-	else {
-		std::cerr << "Unable to open the output file for writing." << std::endl;
-	}
-	outputFile << std::endl;
-	outputFile.close();
-}
-
-void Readfile(const char* fileName, std::vector<Vertex>& verticesSpiral) {
-	std::ifstream inputFile(fileName);
-	if (inputFile.is_open()) {
-
-
-		std::string line;
-		std::getline(inputFile, line);
-		Vertex vertex;
-		char comma; // to capture the commas in the file
-
-		while (inputFile >> vertex.x >> comma >> vertex.y >> comma >> vertex.z >> comma
-			>> vertex.r >> comma >> vertex.g >> comma >> vertex.b) {
-			verticesSpiral.push_back(vertex);
-		}
-
-		inputFile.close();
-	}
-	else {
-		std::cerr << "Unable to open the input file for reading." << std::endl;
-	}
-}
-
 void DrawCoordinateSystem(std::vector<Vertex> vertices)
 {
 	// Draw coordinate system
@@ -179,20 +136,53 @@ void DrawCoordinateSystem(std::vector<Vertex> vertices)
 
 	// Draw coordinate system
 	coordinateVAO.Bind();
-	glDrawArrays(GL_LINES, 0, vertices.size());
+	//glDrawArrays(GL_LINES, 0, vertices.size());
+	glDrawArrays(GL_LINES, 0, static_cast<GLsizei>(vertices.size()));
 	coordinateVAO.Unbind();
 }
 
-void DrawSquare(vector<Vertex> points )
+vector<Vertex> XOrientation(glm::vec3 position, float offset, glm::vec3 Color0, glm::vec3 Color1)
 {
+	vector<Vertex> points;
+	points.push_back(Vertex{ position.x,position.y,position.z, Color0.x,Color0.y,Color0.z});
+	points.push_back(Vertex{ position.x + offset,position.y,position.z,Color1.x,Color1.y,Color1.z });
+	points.push_back(Vertex{ position.x,position.y + offset,position.z ,Color1.x,Color1.y,Color1.z });
+	points.push_back(Vertex{ position.x + offset,position.y + offset,position.z,Color0.x,Color0.y,Color0.z});
+	return points;
+}
+vector<Vertex> YOrientation(glm::vec3 position, float offset, glm::vec3 Color0, glm::vec3 Color1)
+{
+	vector<Vertex> points;
+	points.push_back(Vertex{ position.x,position.y,position.z ,Color0.x,Color0.y,Color0.z });
+	points.push_back(Vertex{ position.x ,position.y,position.z +offset ,Color1.x,Color1.y,Color1.z });
+	points.push_back(Vertex{ position.x+offset,position.y,position.z,Color1.x,Color1.y,Color1.z });
+	points.push_back(Vertex{ position.x + offset,position.y,position.z +offset,Color0.x,Color0.y,Color0.z });
+	return points;
+}
+vector<Vertex> ZOrientation(glm::vec3 position, float offset, glm::vec3 Color0, glm::vec3 Color1)
+{
+	vector<Vertex> points;
+	points.push_back(Vertex{ position.x,position.y,position.z ,Color0.x,Color0.y,Color0.z });
+	points.push_back(Vertex{ position.x ,position.y,position.z + offset,Color1.x,Color1.y,Color1.z });
+	points.push_back(Vertex{ position.x ,position.y+offset,position.z ,Color1.x,Color1.y,Color1.z });
+	points.push_back(Vertex{ position.x ,position.y+offset,position.z + offset,Color0.x,Color0.y,Color0.z });
+	return points;
+
+}
+
+void DrawSquare(vector<Vertex> position)
+{
+	
+
 	//Draw Square
 	VAO SquareVAO;
 	SquareVAO.Bind();
 
-	VBO SquareVBO(reinterpret_cast<GLfloat*>(points.data()), static_cast<GLsizeiptr>(points.size() * sizeof(Vertex)));
+	VBO SquareVBO(reinterpret_cast<GLfloat*>(position.data()), static_cast<GLsizeiptr>(position.size() * sizeof(Vertex)));
 	SquareVBO.Bind();
 
-
+	EBO SquareEBO(SquareIndices, sizeof(SquareIndices));
+	SquareEBO.Bind();
 
 	//Specify vertex attribute pointers
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
@@ -201,41 +191,59 @@ void DrawSquare(vector<Vertex> points )
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
-	EBO SquareEBO(Indices, sizeof(Indices));
-	/*glGenBuffers(1, &EBO);*/
-	/*glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices), Indices, GL_STATIC_DRAW);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);*/
-
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LESS);
-
-
-	SquareEBO.Bind();
-
-	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 	SquareVAO.Unbind();
 	SquareVBO.Unbind();
 	SquareEBO.Unbind();
 
 }
-void BoxDraw(glm::vec3 position, float scale, float rotation)
+
+void DrawCube(vector<Vertex> points )
 {
-	vector<Vertex> Squarepoints;
-	Squarepoints.push_back(Vertex{ position.x,position.y,position.z,1,1,0 });
-	Squarepoints.push_back(Vertex{ position.x+scale,position.y,position.z,1,0,1 });
-	Squarepoints.push_back(Vertex{ position.x,position.y+scale,position.z,1,0,0 });
-	Squarepoints.push_back(Vertex{ position.x+scale,position.y+scale,position.z,0,0,0 });
+	//Draw Square
+	VAO CubeVAO;
+	CubeVAO.Bind();
 
-	Squarepoints.push_back(Vertex{ position.x,position.y + scale,position.z+scale,1,0,0.5f });
-	Squarepoints.push_back(Vertex{ position.x + scale,position.y,position.z+scale,0.5f,0.2f,0 });
-	Squarepoints.push_back(Vertex{ position.x + scale,position.y + scale,position.z+scale,1,1,1 });
-	Squarepoints.push_back(Vertex{ position.x,position.y,position.z+ scale,1,0.3f,0.4f });
+	VBO CubeVBO(reinterpret_cast<GLfloat*>(points.data()), static_cast<GLsizeiptr>(points.size() * sizeof(Vertex)));
+	CubeVBO.Bind();
 
+	EBO CubeEBO(CubeIndices, sizeof(CubeIndices));
+	CubeEBO.Bind();
 
-	DrawSquare(Squarepoints);
+	//Specify vertex attribute pointers
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+	
+
+	glDrawElements(GL_TRIANGLES, sizeof(CubeIndices), GL_UNSIGNED_INT, 0);
+
+	CubeVAO.Unbind();
+	CubeVBO.Unbind();
+	CubeEBO.Unbind();
 
 }
+
+void CreateCube(glm::vec3 position, float scale, float rotation)
+{
+	vector<Vertex> Cubepoints;
+	Cubepoints.push_back(Vertex{ position.x,position.y,position.z,1,1,0 });
+	Cubepoints.push_back(Vertex{ position.x+scale,position.y,position.z,1,0,1 });
+	Cubepoints.push_back(Vertex{ position.x,position.y+scale,position.z,1,0,0 });
+	Cubepoints.push_back(Vertex{ position.x+scale,position.y+scale,position.z,0,0,0 });
+
+	Cubepoints.push_back(Vertex{ position.x,position.y + scale,position.z+scale,1,0,0.5f });
+	Cubepoints.push_back(Vertex{ position.x + scale,position.y,position.z+scale,0.5f,0.2f,0 });
+	Cubepoints.push_back(Vertex{ position.x + scale,position.y + scale,position.z+scale,1,1,1 });
+	Cubepoints.push_back(Vertex{ position.x,position.y,position.z+ scale,1,0.3f,0.4f });
+
+	DrawCube(Cubepoints);
+
+}
+
 int main()
 {
 	// Initialize GLFW
@@ -263,9 +271,6 @@ int main()
 	// Specify the viewport of OpenGL in the Window
 	glViewport(0, 0, width, height);
 
-
-
-
 	// Create vector to store vertices & Generate coordinate system
 	std::vector<Vertex> verticesCoordinate;
 	CreateCoordinateSystem(verticesCoordinate, -10, 10); // Ranges from -10 to 10
@@ -274,8 +279,9 @@ int main()
 	Shader shaderProgram("default.vert", "default.frag");
 
 	//Camera 
-	Camera camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
-
+	Camera camera(width, height, glm::vec3(0.0f, 1.f, 10.0f));
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
 	// Main while loop
 	while (!glfwWindowShouldClose(window))
 	{
@@ -288,15 +294,35 @@ int main()
 
 		camera.Inputs(window);
 		camera.Matrix(45.0f, 0.1f, 500.0f, shaderProgram, "camMatrix");
-
-
 		
 
-		BoxDraw(glm::vec3(-0.1f,-0.1f,-0.1f),0.2f,0.f);
+		CreateCube(glm::vec3(-0.1f,0,-0.1f),0.2f,0.f);
 
-		DrawCoordinateSystem(verticesCoordinate);
+		//DrawCoordinateSystem(verticesCoordinate);
 
+		//player
+		DrawSquare(YOrientation(glm::vec3(-5,0,-5), 10,glm::vec3(0, 0.8f, 0.2f),glm::vec3(0,0.2f,0)));
+
+		//Door
+		glm::vec3 DoorColor = glm::vec3(0.6f, 0.3f, 0.1f);
+		DrawSquare(ZOrientation(glm::vec3(-2, 0, -1.5f), 0.2f, DoorColor, DoorColor));
+		DrawSquare(ZOrientation(glm::vec3(-2, 0.2f, -1.5f), 0.2f, DoorColor, DoorColor));
+
+		//house
+		glm::vec3 HouseColor = glm::vec3(0.2f, 0.3f, 0.2f);
+		DrawSquare(ZOrientation(glm::vec3(-2, 0, -2), 0.5f, HouseColor, HouseColor));
+		DrawSquare(ZOrientation(glm::vec3(-2, 0, -1.3), 0.5f, HouseColor, HouseColor));
+
+		DrawSquare(ZOrientation(glm::vec3(-3, 0, -2), 0.6f, HouseColor, HouseColor));
+		DrawSquare(ZOrientation(glm::vec3(-3, 0, -1.4), 0.6f, HouseColor, HouseColor));
+
+		DrawSquare(XOrientation(glm::vec3(-2.5f, 0, -2), 0.5f, HouseColor, HouseColor));
+		DrawSquare(XOrientation(glm::vec3(-3.f, 0, -2), 0.5f, HouseColor, HouseColor));
+		
+		DrawSquare(XOrientation(glm::vec3(-2.5f, 0, -0.8f), 0.5f, HouseColor, HouseColor));
+		DrawSquare(XOrientation(glm::vec3(-3.f, 0, -0.8f), 0.5f, HouseColor, HouseColor));
 		// Swap the back buffer with the front buffer
+
 		glfwSwapBuffers(window);
 		// Take care of all GLFW events
 		glfwPollEvents();
