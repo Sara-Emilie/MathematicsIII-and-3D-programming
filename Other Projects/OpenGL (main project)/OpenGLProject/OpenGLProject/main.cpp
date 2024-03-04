@@ -36,6 +36,36 @@ struct Vertex
 	//float pr, pg, pb;
 };
 
+unsigned int Indices[] = 
+{
+
+	0,1,2,  // Front face
+	3,1,2,
+
+	7,5,4,  // Back face
+	6,4,5,
+
+	4,2,6,  // Top face
+	3,6,2,
+
+	7,0,5, // Bottom face
+	1,5,0,
+
+	//7,2,0,  // Left face
+	//7,2,4,
+
+	2,7,0
+	,2,4,7,
+
+	5,3,1,  // Right face
+	5,3,6
+
+	
+
+};
+
+
+
 
 void CreateCoordinateSystem(std::vector<Vertex>& vertices, float start, float iterations) {
 	
@@ -89,37 +119,6 @@ void CreateCoordinateSystem(std::vector<Vertex>& vertices, float start, float it
 
 
 
-// Function to calculate cubic polynomial coefficients and evaluate the polynomial
-void CalculateCubicPoly(std::vector<Vertex>& verticesCubic) {
-	MatrixXd X_Matrix(4, 4);
-	MatrixXd Y_Matrix(4, 1);
-
-	X_Matrix <<
-		1, 1, 1, 1,
-		1.5 * 1.5 * 1.5, 1.5 * 1.5, 1.5, 1,
-		2.1 * 2.1 * 2.1, 2.1 * 2.1, 2.1, 1,
-		4 * 4 * 4, 4 * 4, 4, 1;
-
-	Y_Matrix <<
-		4,
-		0.8,
-		5.1,
-		0.6;
-
-	MatrixXd X_Matrix_Inverse = X_Matrix.inverse();
-	MatrixXd X_Matrix_Answer = X_Matrix_Inverse * Y_Matrix;
-
-	cout << "X_Matrix_Answer: " << X_Matrix_Answer << endl;
-
-	// Evaluate the polynomial for x-values corresponding to the data points
-	for (double x : {1.0, 1.5, 2.1, 4.0}) {
-		double y = X_Matrix_Answer(0, 0) * x * x * x + X_Matrix_Answer(1, 0) * x * x + X_Matrix_Answer(2, 0) * x + X_Matrix_Answer(3, 0);
-
-		cout << "x: " << x << " y: " << y << endl;
-		verticesCubic.push_back(Vertex{ static_cast<float>(x) / 10, static_cast<float>(y) / 10, 0.0f, 1.0f, 1.0f, 0.0f });
-	}
-}
-
 void writeToFile(const char* fileName, double x, double y, double z, double r, double g, double b) {
 	std::ofstream outputFile(fileName, std::ios::app);  // Open the file in append mode
 	if (outputFile.is_open()) {
@@ -157,6 +156,86 @@ void Readfile(const char* fileName, std::vector<Vertex>& verticesSpiral) {
 	}
 }
 
+void DrawCoordinateSystem(std::vector<Vertex> vertices)
+{
+	// Draw coordinate system
+	VAO coordinateVAO;
+	coordinateVAO.Bind();
+
+	// Create VBO object and initialize it with vertex data
+	VBO coordinateVBO(reinterpret_cast<GLfloat*>(vertices.data()), static_cast<GLsizeiptr>(vertices.size() * sizeof(Vertex)));
+	coordinateVBO.Bind();
+
+	// Specify vertex attribute pointers
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
+	// Unbind VBO and VAO
+	coordinateVBO.Unbind();
+	coordinateVAO.Unbind();
+
+	// Draw coordinate system
+	coordinateVAO.Bind();
+	glDrawArrays(GL_LINES, 0, vertices.size());
+	coordinateVAO.Unbind();
+}
+
+void DrawSquare(vector<Vertex> points )
+{
+	//Draw Square
+	VAO SquareVAO;
+	SquareVAO.Bind();
+
+	VBO SquareVBO(reinterpret_cast<GLfloat*>(points.data()), static_cast<GLsizeiptr>(points.size() * sizeof(Vertex)));
+	SquareVBO.Bind();
+
+
+
+	//Specify vertex attribute pointers
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
+	EBO SquareEBO(Indices, sizeof(Indices));
+	/*glGenBuffers(1, &EBO);*/
+	/*glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices), Indices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);*/
+
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+
+
+	SquareEBO.Bind();
+
+	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+
+	SquareVAO.Unbind();
+	SquareVBO.Unbind();
+	SquareEBO.Unbind();
+
+}
+void BoxDraw(glm::vec3 position, float scale, float rotation)
+{
+	vector<Vertex> Squarepoints;
+	Squarepoints.push_back(Vertex{ position.x,position.y,position.z,1,1,0 });
+	Squarepoints.push_back(Vertex{ position.x+scale,position.y,position.z,1,0,1 });
+	Squarepoints.push_back(Vertex{ position.x,position.y+scale,position.z,1,0,0 });
+	Squarepoints.push_back(Vertex{ position.x+scale,position.y+scale,position.z,0,0,0 });
+
+	Squarepoints.push_back(Vertex{ position.x,position.y + scale,position.z+scale,1,0,0.5f });
+	Squarepoints.push_back(Vertex{ position.x + scale,position.y,position.z+scale,0.5f,0.2f,0 });
+	Squarepoints.push_back(Vertex{ position.x + scale,position.y + scale,position.z+scale,1,1,1 });
+	Squarepoints.push_back(Vertex{ position.x,position.y,position.z+ scale,1,0.3f,0.4f });
+
+
+	DrawSquare(Squarepoints);
+
+}
 int main()
 {
 	// Initialize GLFW
@@ -187,23 +266,15 @@ int main()
 
 
 
-	// Create vector to store vertices
+	// Create vector to store vertices & Generate coordinate system
 	std::vector<Vertex> verticesCoordinate;
-	// Generate coordinate system
 	CreateCoordinateSystem(verticesCoordinate, -10, 10); // Ranges from -10 to 10
-
-	// Create vector to store vertices for the parabola
-	std::vector<Vertex> verticesParabola;
-	// Calculate parabola
-	CalculateCubicPoly(verticesParabola);
 
 	// Generates Shader object using shaders defualt.vert and default.frag
 	Shader shaderProgram("default.vert", "default.frag");
 
-
+	//Camera 
 	Camera camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
-
-
 
 	// Main while loop
 	while (!glfwWindowShouldClose(window))
@@ -219,52 +290,11 @@ int main()
 		camera.Matrix(45.0f, 0.1f, 500.0f, shaderProgram, "camMatrix");
 
 
-		// Draw coordinate system
-		VAO coordinateVAO;
-		coordinateVAO.Bind();
+		
 
-		// Create VBO object and initialize it with vertex data
-		VBO coordinateVBO(reinterpret_cast<GLfloat*>(verticesCoordinate.data()), static_cast<GLsizeiptr>(verticesCoordinate.size() * sizeof(Vertex)));
+		BoxDraw(glm::vec3(-0.1f,-0.1f,-0.1f),0.2f,0.f);
 
-		// Specify vertex attribute pointers
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
-		glEnableVertexAttribArray(0);
-
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(3 * sizeof(float)));
-		glEnableVertexAttribArray(1);
-
-		// Unbind VBO and VAO
-		coordinateVBO.Unbind();
-		coordinateVAO.Unbind();
-
-		// Draw coordinate system
-		coordinateVAO.Bind();
-		glDrawArrays(GL_LINES, 0, verticesCoordinate.size());
-		coordinateVAO.Unbind();
-
-
-		// Draw parabola
-		VAO parabolaVAO;
-		parabolaVAO.Bind();
-
-		// Create VBO object and initialize it with vertex data
-		VBO parabolaVBO(reinterpret_cast<GLfloat*>(verticesParabola.data()), static_cast<GLsizeiptr>(verticesParabola.size() * sizeof(Vertex)));
-
-		// Specify vertex attribute pointers
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
-		glEnableVertexAttribArray(0);
-
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(3 * sizeof(float)));
-		glEnableVertexAttribArray(1);
-
-		// Unbind VBO and VAO
-		parabolaVBO.Unbind();
-		parabolaVAO.Unbind();
-
-		// Draw parabola
-		parabolaVAO.Bind();
-		glDrawArrays(GL_LINE_STRIP, 0, verticesParabola.size());
-		parabolaVAO.Unbind();
+		DrawCoordinateSystem(verticesCoordinate);
 
 		// Swap the back buffer with the front buffer
 		glfwSwapBuffers(window);
