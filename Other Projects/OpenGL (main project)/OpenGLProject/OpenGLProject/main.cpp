@@ -197,6 +197,10 @@ void DrawSquare(vector<Vertex> position)
 	SquareVBO.Unbind();
 	SquareEBO.Unbind();
 
+	SquareVAO.Delete();
+	SquareVBO.Delete();
+	SquareEBO.Delete();
+
 }
 
 void DrawCube(vector<Vertex> points )
@@ -224,6 +228,10 @@ void DrawCube(vector<Vertex> points )
 	CubeVAO.Unbind();
 	CubeVBO.Unbind();
 	CubeEBO.Unbind();
+
+	CubeVAO.Delete();
+	CubeVBO.Delete();
+	CubeEBO.Delete();
 
 }
 
@@ -321,7 +329,11 @@ int main()
 		
 		DrawSquare(XOrientation(glm::vec3(-2.5f, 0, -0.8f), 0.5f, HouseColor, HouseColor));
 		DrawSquare(XOrientation(glm::vec3(-3.f, 0, -0.8f), 0.5f, HouseColor, HouseColor));
-		// Swap the back buffer with the front buffer
+		 
+		
+		//Swap the back buffer with the front buffer
+
+
 
 		glfwSwapBuffers(window);
 		// Take care of all GLFW events
