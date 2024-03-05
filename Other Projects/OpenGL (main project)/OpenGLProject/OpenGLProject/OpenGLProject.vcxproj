@@ -130,7 +130,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BoundingBox.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CoordinateSystem.cpp" />
+    <ClCompile Include="Cube.cpp" />
     <ClCompile Include="Dependencies\includes\glm\detail\glm.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
@@ -138,6 +141,7 @@
     <ClCompile Include="Shaders\ShaderClass.cpp" />
     <ClCompile Include="Shaders\VBO.cpp" />
     <ClCompile Include="Shaders\VAO.cpp" />
+    <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="default.frag" />
@@ -316,7 +320,10 @@
     <Library Include="Dependencies\libs\glfw3_mt.lib" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BoundingBox.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CoordinateSystem.h" />
+    <ClInclude Include="Cube.h" />
     <ClInclude Include="Dependencies\Eigen\src\Cholesky\LDLT.h" />
     <ClInclude Include="Dependencies\Eigen\src\Cholesky\LLT.h" />
     <ClInclude Include="Dependencies\Eigen\src\Cholesky\LLT_LAPACKE.h" />
@@ -914,6 +921,7 @@
     <ClInclude Include="Shaders\ShaderClass.h" />
     <ClInclude Include="Shaders\VBO.h" />
     <ClInclude Include="Shaders\VAO.h" />
+    <ClInclude Include="Wall.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
