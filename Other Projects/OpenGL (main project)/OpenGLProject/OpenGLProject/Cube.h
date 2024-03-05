@@ -14,7 +14,6 @@ struct CubeVertex
 {
 	float x, y, z;
 	float r, g, b;
-	float u, v;
 };
 
 
@@ -26,7 +25,7 @@ class Cube
 
 	Cube();
 	void DrawCube(std::vector<CubeVertex> points);
-	void CreateCube(glm::vec3 position, float scale, float rotation);
+	void CreateCube(glm::vec3 position, glm::vec3 scale, float rotation);
 };
 
 

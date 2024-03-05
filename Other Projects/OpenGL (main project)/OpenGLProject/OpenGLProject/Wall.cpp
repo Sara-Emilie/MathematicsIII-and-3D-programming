@@ -47,33 +47,33 @@ void Wall::DrawSquare(std::vector<WallVertex> position)
 
 }
 
-void Wall::CreateXWall(glm::vec3 position, float xoffset, float yoffset, glm::vec3 Color0, glm::vec3 Color1)
+void Wall::CreateXWall(glm::vec3 position, glm::vec3 offset, glm::vec3 Color0, glm::vec3 Color1)
 {
 	std::vector<WallVertex> points;
 	points.push_back(WallVertex{ position.x,position.y,position.z, Color0.x,Color0.y,Color0.z });
-	points.push_back(WallVertex{ position.x + xoffset,position.y,position.z,Color1.x,Color1.y,Color1.z });
-	points.push_back(WallVertex{ position.x,position.y + yoffset,position.z ,Color1.x,Color1.y,Color1.z });
-	points.push_back(WallVertex{ position.x + xoffset,position.y + yoffset,position.z,Color0.x,Color0.y,Color0.z });
+	points.push_back(WallVertex{ position.x + offset.x,position.y,position.z,Color1.x,Color1.y,Color1.z });
+	points.push_back(WallVertex{ position.x,position.y + offset.y,position.z ,Color1.x,Color1.y,Color1.z });
+	points.push_back(WallVertex{ position.x + offset.x,position.y + offset.y,position.z,Color0.x,Color0.y,Color0.z });
 	DrawSquare(points);
 }
 
-void Wall::CreateYWall(glm::vec3 position, float xoffset, float zoffset, glm::vec3 Color0, glm::vec3 Color1)
+void Wall::CreateYWall(glm::vec3 position, glm::vec3 offset, glm::vec3 Color0, glm::vec3 Color1)
 {
 	std::vector<WallVertex> points;
 	points.push_back(WallVertex{ position.x,position.y,position.z ,Color0.x,Color0.y,Color0.z });
-	points.push_back(WallVertex{ position.x ,position.y,position.z + zoffset ,Color1.x,Color1.y,Color1.z });
-	points.push_back(WallVertex{ position.x + xoffset,position.y,position.z,Color1.x,Color1.y,Color1.z });
-	points.push_back(WallVertex{ position.x + xoffset,position.y,position.z + zoffset,Color0.x,Color0.y,Color0.z });
+	points.push_back(WallVertex{ position.x ,position.y,position.z + offset.z ,Color1.x,Color1.y,Color1.z });
+	points.push_back(WallVertex{ position.x + offset.x,position.y,position.z,Color1.x,Color1.y,Color1.z });
+	points.push_back(WallVertex{ position.x + offset.x,position.y,position.z + offset.z,Color0.x,Color0.y,Color0.z });
 	DrawSquare(points);
 }
 
-void Wall::CreateZWall(glm::vec3 position, float yoffset, float zoffset, glm::vec3 Color0, glm::vec3 Color1)
+void Wall::CreateZWall(glm::vec3 position, glm::vec3 offset, glm::vec3 Color0, glm::vec3 Color1)
 {
 	std::vector<WallVertex> points;
 	points.push_back(WallVertex{ position.x,position.y,position.z ,Color0.x,Color0.y,Color0.z });
-	points.push_back(WallVertex{ position.x ,position.y,position.z + zoffset,Color1.x,Color1.y,Color1.z });
-	points.push_back(WallVertex{ position.x ,position.y + yoffset,position.z ,Color1.x,Color1.y,Color1.z });
-	points.push_back(WallVertex{ position.x ,position.y + yoffset,position.z + zoffset,Color0.x,Color0.y,Color0.z });
+	points.push_back(WallVertex{ position.x ,position.y,position.z + offset.z,Color1.x,Color1.y,Color1.z });
+	points.push_back(WallVertex{ position.x ,position.y + offset.y,position.z ,Color1.x,Color1.y,Color1.z });
+	points.push_back(WallVertex{ position.x ,position.y + offset.y,position.z + offset.z,Color0.x,Color0.y,Color0.z });
 	DrawSquare(points);
 
 }

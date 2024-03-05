@@ -84,7 +84,7 @@ int main()
 	Cube cube;
 	Wall walls;
 
-	float speed = 0.01f;
+	float speed = 0.1f;
 	float MovementX{0};
 	float MovementZ{ 0 };
 
@@ -133,29 +133,29 @@ int main()
 
 
 		//Cube
-		cube.CreateCube(glm::vec3(-0.1f * MovementX, 0, -0.1f * MovementZ), 0.2f, 0.f);
+		cube.CreateCube(glm::vec3(-0.1f * MovementX, 0, -0.1f * MovementZ), glm::vec3(0.2f,0.4f,0.2f), 0.f);
 
 		//DrawCoordinateSystem(verticesCoordinate);
 
 		//floor
-		walls.CreateYWall(glm::vec3(-10, 0, -10), 20, 20, glm::vec3(0, 0.8f, 0.2f), glm::vec3(0, 0.2f, 0));
+		walls.CreateYWall(glm::vec3(-10, 0, -10),glm::vec3( 20,20, 20), glm::vec3(0, 0.8f, 0.2f), glm::vec3(0, 0.2f, 0));
 
 		//Door
 		//DrawSquare(XOrientation(doorPosition, doorWidth, doorHeight, DoorColor, DoorColor1));
-		walls.CreateXWall(glm::vec3(doorPosition.x + doorMove.x, doorPosition.y + doorMove.y, doorPosition.z + doorMove.z), doorWidth, doorHeight, DoorColor, DoorColor1);
+		walls.CreateXWall(glm::vec3(doorPosition.x + doorMove.x, doorPosition.y + doorMove.y, doorPosition.z + doorMove.z),glm::vec3(doorWidth, doorHeight, 0), DoorColor, DoorColor1);
 
 		//House around door
-		walls.CreateXWall(glm::vec3(doorPosition.x + doorWidth, doorPosition.y, doorPosition.z), houseWidth / 2, houseHeight, WallColor, WallColor1);
-		walls.CreateXWall(glm::vec3(doorPosition.x - (houseWidth / 2) , doorPosition.y, doorPosition.z), houseWidth / 2, houseHeight, WallColor, WallColor1);
+		walls.CreateXWall(glm::vec3(doorPosition.x + doorWidth, doorPosition.y, doorPosition.z), glm::vec3(houseWidth / 2, houseHeight,0), WallColor, WallColor1);
+		walls.CreateXWall(glm::vec3(doorPosition.x - (houseWidth / 2) , doorPosition.y, doorPosition.z), glm::vec3(houseWidth / 2, houseHeight,0), WallColor, WallColor1);
 
-		walls.CreateZWall(glm::vec3(doorPosition.x - (houseWidth / 2), doorPosition.y, doorPosition.z - houseWidth), houseHeight, houseWidth, WallColor, WallColor1);
-		walls.CreateZWall(glm::vec3(doorPosition.x + (houseWidth / 2) + doorWidth, doorPosition.y, doorPosition.z - houseWidth), houseHeight, houseWidth, WallColor, WallColor);
+		walls.CreateZWall(glm::vec3(doorPosition.x - (houseWidth / 2), doorPosition.y, doorPosition.z - houseWidth), glm::vec3(0, houseHeight, houseWidth), WallColor, WallColor1);
+		walls.CreateZWall(glm::vec3(doorPosition.x + (houseWidth / 2) + doorWidth, doorPosition.y, doorPosition.z - houseWidth), glm::vec3(0, houseHeight, houseWidth), WallColor, WallColor);
 
-		walls.CreateXWall(glm::vec3(doorPosition.x - (houseWidth / 2), doorPosition.y, doorPosition.z - houseWidth), houseWidth + doorWidth, houseHeight, WallColor, WallColor1);
-		walls.CreateXWall(glm::vec3(doorPosition.x, doorPosition.y + doorHeight, doorPosition.z), doorWidth, houseHeight - doorHeight, WallColor, WallColor1);
+		walls.CreateXWall(glm::vec3(doorPosition.x - (houseWidth / 2), doorPosition.y, doorPosition.z - houseWidth), glm::vec3(houseWidth + doorWidth, houseHeight,0), WallColor, WallColor1);
+		walls.CreateXWall(glm::vec3(doorPosition.x, doorPosition.y + doorHeight, doorPosition.z), glm::vec3(doorWidth, houseHeight - doorHeight, 0), WallColor, WallColor1);
 
 		//Roof
-		walls.CreateYWall(glm::vec3(doorPosition.x - (houseWidth / 2), doorPosition.y + houseHeight, doorPosition.z - houseWidth), houseWidth + doorWidth, houseWidth, WallColor, WallColor1);
+		walls.CreateYWall(glm::vec3(doorPosition.x - (houseWidth / 2), doorPosition.y + houseHeight, doorPosition.z - houseWidth), glm::vec3(houseWidth + doorWidth, 0,houseWidth), WallColor, WallColor1);
 
 		
 		//Swap the back buffer with the front buffer

@@ -5,6 +5,7 @@
 
 class BoundingBox
 {
+	public:
 	glm::vec3 Extent;
 	glm::vec3 Position;
 	

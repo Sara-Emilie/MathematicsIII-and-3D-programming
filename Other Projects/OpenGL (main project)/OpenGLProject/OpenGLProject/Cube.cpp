@@ -6,7 +6,6 @@
 #include <GLFW/glfw3.h>
 #include <vector>
 #include <cmath>
-#include "BoundingBox.h"
 
 
 
@@ -33,7 +32,6 @@ unsigned int CubeIndices[] =
 
 Cube::Cube()
 {
-
     
 };
 
@@ -57,7 +55,7 @@ void Cube::DrawCube(std::vector<CubeVertex> points)
 	glEnableVertexAttribArray(1);
 
 
-	glDrawElements(GL_TRIANGLES, sizeof(CubeIndices), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, sizeof(CubeIndices), GL_UNSIGNED_INT, nullptr);
 
 	CubeVAO.Unbind();
 	CubeVBO.Unbind();
@@ -72,18 +70,18 @@ void Cube::DrawCube(std::vector<CubeVertex> points)
 void Cube::CreateCube(glm::vec3 position, glm::vec3 scale, float rotation)
 {
 	std::vector<CubeVertex> Cubepoints;
-	Cubepoints.push_back(CubeVertex{ position.x,position.y,position.z,1,1,0 });
-	Cubepoints.push_back(CubeVertex{ position.x + scale,position.y,position.z,1,0,1 });
-	Cubepoints.push_back(CubeVertex{ position.x,position.y + scale,position.z,1,0,0 });
-	Cubepoints.push_back(CubeVertex{ position.x + scale,position.y + scale,position.z,0,0,0 });
+	Cubepoints.push_back(CubeVertex{ position.x, position.y, position.z,1,1,0 });
+	Cubepoints.push_back(CubeVertex{ position.x + scale.x, position.y, position.z,1,0,1 });
+	Cubepoints.push_back(CubeVertex{ position.x, position.y + scale.y, position.z,1,0,0 });
+	Cubepoints.push_back(CubeVertex{ position.x + scale.x, position.y + scale.y, position.z,0,0,0 });
 
-	Cubepoints.push_back(CubeVertex{ position.x,position.y + scale,position.z + scale,1,0,0.5f });
-	Cubepoints.push_back(CubeVertex{ position.x + scale,position.y,position.z + scale,0.5f,0.2f,0 });
-	Cubepoints.push_back(CubeVertex{ position.x + scale,position.y + scale,position.z + scale,1,1,1 });
-	Cubepoints.push_back(CubeVertex{ position.x,position.y,position.z + scale,1,0.3f,0.4f });
+	Cubepoints.push_back(CubeVertex{ position.x, position.y + scale.y, position.z + scale.z,1,0,0.5f });
+	Cubepoints.push_back(CubeVertex{ position.x + scale.x, position.y, position.z + scale.z,0.5f,0.2f,0 });
+	Cubepoints.push_back(CubeVertex{ position.x + scale.x, position.y + scale.y, position.z + scale.z,1,1,1 });
+	Cubepoints.push_back(CubeVertex{ position.x, position.y, position.z + scale.z,1,0.3f,0.4f });
 
 	AABB.Position = position;
-	AABB.Extent = scale / 2;
+	AABB.Extent = scale;
 	DrawCube(Cubepoints);
 
 };
