@@ -286,17 +286,12 @@ int main()
 	// Generates Shader object using shaders defualt.vert and default.frag
 	Shader shaderProgram("default.vert", "default.frag");
 
-	//Camera 
-	Camera camera(width, height, glm::vec3(0.0f, 1.f, 10.0f));
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LESS);
-
 	// Define the dimensions of the door
 	float doorWidth = 0.4f; // Width of the door
 	float doorHeight = 0.6f; // Height of the door
 
 	// Define the position of the door
-	glm::vec3 doorPosition = glm::vec3(-2.0f, 0.0f, -1.5f);
+	glm::vec3 doorPosition = glm::vec3(-2.0f, 0.0f, -1.0f);
 
 	// Define the dimensions of the house
 	float houseWidth = doorWidth * 5; // Width of the house
@@ -306,26 +301,58 @@ int main()
 	glm::vec3 WallColor = glm::vec3(0.2f, 0.3f, 0.2f);
 	glm::vec3 DoorColor = glm::vec3(0.6f, 0.3f, 0.1f);
 
+
+	float speed = 0.01f;
+	float MovementX{0};
+	float MovementZ{ 0 };
+
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+
+
 	// Main while loop
 	while (!glfwWindowShouldClose(window))
 	{
 		// Specify the color of the background
-		glClearColor(0.01f, 0.01f, 0.01f, 1.0f);
+		glClearColor(0.01f, 0.01f, 0.1f, 1.0f);
 		// Clean the back buffer and depth buffer
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		// Tell OpenGL which Shader Program we want to use
 		shaderProgram.Activate();
 
-		camera.Inputs(window);
-		camera.Matrix(45.0f, 0.1f, 500.0f, shaderProgram, "camMatrix");
 		
+		//Cube movement
+		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) //left
+		{
+			MovementX += speed;
+		}
+		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) //right
+		{
+			MovementX -= speed;
+		}
+		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) //back
+		{
+			MovementZ -= speed;
+		}
+		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) //forward
+		{
+			MovementZ += speed;
+		}
 
-		CreateCube(glm::vec3(-0.1f,0,-0.1f),0.2f,0.f);
+		//Camera 
+		Camera camera(width, height, glm::vec3(glm::vec3(( - 0.1f * MovementX), 1.f,(- 0.1f * MovementZ) + 5)));
+		
+		camera.Inputs(window);
+		camera.Matrix(50.0f, 0.1f, 500.0f, shaderProgram, "camMatrix");
+
+
+		//Cube
+		CreateCube(glm::vec3(-0.1f * MovementX, 0, -0.1f * MovementZ), 0.2f, 0.f);
 
 		//DrawCoordinateSystem(verticesCoordinate);
 
 		//floor
-		DrawSquare(YOrientation(glm::vec3(-5, 0, -5), 10, 10, glm::vec3(0, 0.8f, 0.2f), glm::vec3(0, 0.2f, 0)));
+		DrawSquare(YOrientation(glm::vec3(-10, 0, -10), 20, 20, glm::vec3(0, 0.8f, 0.2f), glm::vec3(0, 0.2f, 0)));
 
 		//Door
 		DrawSquare(XOrientation(doorPosition, doorWidth, doorHeight, DoorColor, DoorColor));

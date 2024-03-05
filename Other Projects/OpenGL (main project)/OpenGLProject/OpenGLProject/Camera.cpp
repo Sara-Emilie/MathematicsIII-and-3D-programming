@@ -26,39 +26,39 @@ void Camera::Matrix(float FOVdeg, float nearPlane, float farPlane, Shader& shade
 
 void Camera::Inputs(GLFWwindow* window)
 {
-	// Handles key inputs
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) //W, Move forward
-	{
-		Position += speed * Orientation;
-	}
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) //A, move left
-	{
-		Position += speed * -glm::normalize(glm::cross(Orientation, Up));
-	}
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) //S, move back
-	{
-		Position += speed * -Orientation;
-	}
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) //D, move right
-	{
-		Position += speed * glm::normalize(glm::cross(Orientation, Up));
-	}
-	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) //Space, jump
-	{
-		Position += speed * Up;
-	}
+	 //Handles key inputs
+	//if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) //W, Move forward
+	//{
+	//	Position += speed * Orientation;
+	//}
+	//if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) //A, move left
+	//{
+	//	Position += speed * -glm::normalize(glm::cross(Orientation, Up));
+	//}
+	//if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) //S, move back
+	//{
+	//	Position += speed * -Orientation;
+	//}
+	//if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) //D, move right
+	//{
+	//	Position += speed * glm::normalize(glm::cross(Orientation, Up));
+	//}
+	//if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) //Space, jump
+	//{
+	//	Position += speed * Up;
+	//}
 	//if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) //Ctrl, crouch
 	//{
 	//	Position += speed * -Up;
 	//}
-	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) //Shift, move faster
-	{
-		speed = 0.04f;
-	}
-	else if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE) //If not, move at normal speed
-	{
-		speed = 0.01f;
-	}
+	//if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) //Shift, move faster
+	//{
+	//	speed = 0.04f;
+	//}
+	//else if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE) //If not, move at normal speed
+	//{
+	//	speed = 0.01f;
+	//}
 
 
 	// Handles mouse inputs
