@@ -82,6 +82,7 @@ int main()
 	glm::vec3 DoorColor1 = glm::vec3(0.61f, 0.31f, 0.11f);
 
 	Cube cube;
+	Cube cube2;
 	Wall walls;
 
 	float speed = 0.1f;
@@ -142,6 +143,7 @@ int main()
 		//Cube
 		cube.CreateCube(glm::vec3(-0.1f * MovementX, 0, -0.1f * MovementZ), glm::vec3(0.2f,0.2f,0.2f), 0.f);
 
+		cube2.CreateCube(glm::vec3(1, 0, 1), glm::vec3(1, 0.5f, 1),0);
 		//DrawCoordinateSystem(verticesCoordinate);
 
 		//floor
@@ -164,12 +166,12 @@ int main()
 		//Roof
 		walls.CreateYWall(glm::vec3(doorPosition.x - (houseWidth / 2), doorPosition.y + houseHeight, doorPosition.z - houseWidth), glm::vec3(houseWidth + doorWidth, 1,houseWidth), WallColor, WallColor1);
 
-		if(!cube.AABB.TestAABBAABB(walls.AABB))
+		if(!cube.AABB.TestAABBAABB(cube2.AABB))
 		{
 			WallColor = glm::vec3(1.f, 0, 1.f);
 			cout << "not colliding" << endl;
 		}
-		if(cube.AABB.TestAABBAABB(walls.AABB))
+		if(cube.AABB.TestAABBAABB(cube2.AABB))
 		{
 			WallColor = glm::vec3(0.f, 1.f, 1.f);
 			cout << "colliding" << endl;
