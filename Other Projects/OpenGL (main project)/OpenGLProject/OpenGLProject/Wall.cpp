@@ -55,6 +55,8 @@ void Wall::CreateXWall(glm::vec3 position, glm::vec3 offset, glm::vec3 Color0, g
 	points.push_back(WallVertex{ position.x,position.y + offset.y,position.z ,Color1.x,Color1.y,Color1.z });
 	points.push_back(WallVertex{ position.x + offset.x,position.y + offset.y,position.z,Color0.x,Color0.y,Color0.z });
 	DrawSquare(points);
+	AABB.Position = position - glm::vec3(offset.x/2,offset.y/2,offset.z/2);
+	AABB.Extent = offset - glm::vec3(offset.x / 2, offset.y / 2, offset.z / 2);
 }
 
 void Wall::CreateYWall(glm::vec3 position, glm::vec3 offset, glm::vec3 Color0, glm::vec3 Color1)
@@ -65,8 +67,9 @@ void Wall::CreateYWall(glm::vec3 position, glm::vec3 offset, glm::vec3 Color0, g
 	points.push_back(WallVertex{ position.x + offset.x,position.y,position.z,Color1.x,Color1.y,Color1.z });
 	points.push_back(WallVertex{ position.x + offset.x,position.y,position.z + offset.z,Color0.x,Color0.y,Color0.z });
 	DrawSquare(points);
+	AABB.Position = position - glm::vec3(offset.x / 2, offset.y / 2, offset.z / 2);
+	AABB.Extent = offset - glm::vec3(offset.x / 2, offset.y / 2, offset.z / 2);
 }
-
 void Wall::CreateZWall(glm::vec3 position, glm::vec3 offset, glm::vec3 Color0, glm::vec3 Color1)
 {
 	std::vector<WallVertex> points;
@@ -75,6 +78,8 @@ void Wall::CreateZWall(glm::vec3 position, glm::vec3 offset, glm::vec3 Color0, g
 	points.push_back(WallVertex{ position.x ,position.y + offset.y,position.z ,Color1.x,Color1.y,Color1.z });
 	points.push_back(WallVertex{ position.x ,position.y + offset.y,position.z + offset.z,Color0.x,Color0.y,Color0.z });
 	DrawSquare(points);
+	AABB.Position = position - glm::vec3(offset.x / 2, offset.y / 2, offset.z / 2);
+	AABB.Extent = offset - glm::vec3(offset.x / 2, offset.y / 2, offset.z / 2);
 
 }
 

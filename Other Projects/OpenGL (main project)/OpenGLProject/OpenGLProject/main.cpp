@@ -123,7 +123,14 @@ int main()
 		glm::vec3 doorMove = glm::vec3(0.0f, 0.0f, 0.0f);
 		if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS)
 		{
-			doorMove = glm::vec3(-doorWidth, 0.f, 0.01f);
+			//doorMove = glm::vec3(-doorWidth, 0.f, 0.01f);
+			glm::vec4 vec(doorPosition, 1.0f);
+			glm::mat4 trans = glm::mat4(1.0f);
+			trans = glm::rotate(trans, glm::radians(90.f), glm::vec3(0.f, 0.f, 1.f));
+			trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
+			vec = trans * vec;
+			doorPosition.y = vec.y;
+			
 		} 
 
 		//Camera 
@@ -133,7 +140,7 @@ int main()
 
 
 		//Cube
-		cube.CreateCube(glm::vec3(-0.1f * MovementX, 0, -0.1f * MovementZ), glm::vec3(0.2f,0.4f,0.2f), 0.f);
+		cube.CreateCube(glm::vec3(-0.1f * MovementX, 0, -0.1f * MovementZ), glm::vec3(0.2f,0.2f,0.2f), 0.f);
 
 		//DrawCoordinateSystem(verticesCoordinate);
 
@@ -142,21 +149,32 @@ int main()
 
 		//Door
 		//DrawSquare(XOrientation(doorPosition, doorWidth, doorHeight, DoorColor, DoorColor1));
-		walls.CreateXWall(glm::vec3(doorPosition.x + doorMove.x, doorPosition.y + doorMove.y, doorPosition.z + doorMove.z),glm::vec3(doorWidth, doorHeight, 0), DoorColor, DoorColor1);
+		walls.CreateXWall(glm::vec3(doorPosition.x + doorMove.x, doorPosition.y + doorMove.y, doorPosition.z + doorMove.z),glm::vec3(doorWidth, doorHeight, 1), DoorColor, DoorColor1);
 
 		//House around door
-		walls.CreateXWall(glm::vec3(doorPosition.x + doorWidth, doorPosition.y, doorPosition.z), glm::vec3(houseWidth / 2, houseHeight,0), WallColor, WallColor1);
-		walls.CreateXWall(glm::vec3(doorPosition.x - (houseWidth / 2) , doorPosition.y, doorPosition.z), glm::vec3(houseWidth / 2, houseHeight,0), WallColor, WallColor1);
+		walls.CreateXWall(glm::vec3(doorPosition.x + doorWidth, doorPosition.y, doorPosition.z), glm::vec3(houseWidth / 2, houseHeight,1), WallColor, WallColor1);
+		walls.CreateXWall(glm::vec3(doorPosition.x - (houseWidth / 2) , doorPosition.y, doorPosition.z), glm::vec3(houseWidth / 2, houseHeight, 1), WallColor, WallColor1);
 
-		walls.CreateZWall(glm::vec3(doorPosition.x - (houseWidth / 2), doorPosition.y, doorPosition.z - houseWidth), glm::vec3(0, houseHeight, houseWidth), WallColor, WallColor1);
-		walls.CreateZWall(glm::vec3(doorPosition.x + (houseWidth / 2) + doorWidth, doorPosition.y, doorPosition.z - houseWidth), glm::vec3(0, houseHeight, houseWidth), WallColor, WallColor);
+		walls.CreateZWall(glm::vec3(doorPosition.x - (houseWidth / 2), doorPosition.y, doorPosition.z - houseWidth), glm::vec3(1, houseHeight, houseWidth), WallColor, WallColor1);
+		walls.CreateZWall(glm::vec3(doorPosition.x + (houseWidth / 2) + doorWidth, doorPosition.y, doorPosition.z - houseWidth), glm::vec3(1, houseHeight, houseWidth), WallColor, WallColor);
 
-		walls.CreateXWall(glm::vec3(doorPosition.x - (houseWidth / 2), doorPosition.y, doorPosition.z - houseWidth), glm::vec3(houseWidth + doorWidth, houseHeight,0), WallColor, WallColor1);
-		walls.CreateXWall(glm::vec3(doorPosition.x, doorPosition.y + doorHeight, doorPosition.z), glm::vec3(doorWidth, houseHeight - doorHeight, 0), WallColor, WallColor1);
+		walls.CreateXWall(glm::vec3(doorPosition.x - (houseWidth / 2), doorPosition.y, doorPosition.z - houseWidth), glm::vec3(houseWidth + doorWidth, houseHeight, 1), WallColor, WallColor1);
+		walls.CreateXWall(glm::vec3(doorPosition.x, doorPosition.y + doorHeight, doorPosition.z), glm::vec3(doorWidth, houseHeight - doorHeight, 1), WallColor, WallColor1);
 
 		//Roof
-		walls.CreateYWall(glm::vec3(doorPosition.x - (houseWidth / 2), doorPosition.y + houseHeight, doorPosition.z - houseWidth), glm::vec3(houseWidth + doorWidth, 0,houseWidth), WallColor, WallColor1);
+		walls.CreateYWall(glm::vec3(doorPosition.x - (houseWidth / 2), doorPosition.y + houseHeight, doorPosition.z - houseWidth), glm::vec3(houseWidth + doorWidth, 1,houseWidth), WallColor, WallColor1);
 
+		if(!cube.AABB.TestAABBAABB(walls.AABB))
+		{
+			WallColor = glm::vec3(1.f, 0, 1.f);
+			cout << "not colliding" << endl;
+		}
+		if(cube.AABB.TestAABBAABB(walls.AABB))
+		{
+			WallColor = glm::vec3(0.f, 1.f, 1.f);
+			cout << "colliding" << endl;
+
+		}
 		
 		//Swap the back buffer with the front buffer
 		glfwSwapBuffers(window);

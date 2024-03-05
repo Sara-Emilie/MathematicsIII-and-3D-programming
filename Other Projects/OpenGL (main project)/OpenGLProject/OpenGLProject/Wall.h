@@ -5,6 +5,7 @@
 #include "Shaders/EBO.h"
 #include "Shaders/ShaderClass.h"
 #include <glm/glm.hpp>
+#include "BoundingBox.h"
 
 #ifndef WALL_H
 #define WALL_H
@@ -21,7 +22,7 @@ class Wall
 {
 public:
 	Wall();
-
+	BoundingBox AABB;
 	void DrawSquare(std::vector<WallVertex> position);
 	void CreateXWall(glm::vec3 position, glm::vec3 offset, glm::vec3 Color0, glm::vec3 Color1);
 	void CreateYWall(glm::vec3 position, glm::vec3 offset, glm::vec3 Color0, glm::vec3 Color1);

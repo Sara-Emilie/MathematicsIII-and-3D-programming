@@ -73,15 +73,15 @@ void Cube::CreateCube(glm::vec3 position, glm::vec3 scale, float rotation)
 	Cubepoints.push_back(CubeVertex{ position.x, position.y, position.z,1,1,0 });
 	Cubepoints.push_back(CubeVertex{ position.x + scale.x, position.y, position.z,1,0,1 });
 	Cubepoints.push_back(CubeVertex{ position.x, position.y + scale.y, position.z,1,0,0 });
-	Cubepoints.push_back(CubeVertex{ position.x + scale.x, position.y + scale.y, position.z,0,0,0 });
+	Cubepoints.push_back(CubeVertex{ position.x + scale.x, position.y + scale.y, position.z,1,0,1 });
 
 	Cubepoints.push_back(CubeVertex{ position.x, position.y + scale.y, position.z + scale.z,1,0,0.5f });
 	Cubepoints.push_back(CubeVertex{ position.x + scale.x, position.y, position.z + scale.z,0.5f,0.2f,0 });
-	Cubepoints.push_back(CubeVertex{ position.x + scale.x, position.y + scale.y, position.z + scale.z,1,1,1 });
+	Cubepoints.push_back(CubeVertex{ position.x + scale.x, position.y + scale.y, position.z + scale.z,1,0,1 });
 	Cubepoints.push_back(CubeVertex{ position.x, position.y, position.z + scale.z,1,0.3f,0.4f });
 
-	AABB.Position = position;
-	AABB.Extent = scale;
+	AABB.Position = position - glm::vec3(scale.x/2,scale.y/2,scale.z/2);
+	AABB.Extent = scale - glm::vec3(scale.x/2,scale.y/2,scale.z/2);
 	DrawCube(Cubepoints);
 
 };
