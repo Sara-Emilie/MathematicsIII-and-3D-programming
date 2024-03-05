@@ -141,31 +141,31 @@ void DrawCoordinateSystem(std::vector<Vertex> vertices)
 	coordinateVAO.Unbind();
 }
 
-vector<Vertex> XOrientation(glm::vec3 position, float offset, glm::vec3 Color0, glm::vec3 Color1)
+vector<Vertex> XOrientation(glm::vec3 position, float xoffset, float yoffset, glm::vec3 Color0, glm::vec3 Color1)
 {
 	vector<Vertex> points;
 	points.push_back(Vertex{ position.x,position.y,position.z, Color0.x,Color0.y,Color0.z});
-	points.push_back(Vertex{ position.x + offset,position.y,position.z,Color1.x,Color1.y,Color1.z });
-	points.push_back(Vertex{ position.x,position.y + offset,position.z ,Color1.x,Color1.y,Color1.z });
-	points.push_back(Vertex{ position.x + offset,position.y + offset,position.z,Color0.x,Color0.y,Color0.z});
+	points.push_back(Vertex{ position.x + xoffset,position.y,position.z,Color1.x,Color1.y,Color1.z });
+	points.push_back(Vertex{ position.x,position.y + yoffset,position.z ,Color1.x,Color1.y,Color1.z });
+	points.push_back(Vertex{ position.x + xoffset,position.y + yoffset,position.z,Color0.x,Color0.y,Color0.z});
 	return points;
 }
-vector<Vertex> YOrientation(glm::vec3 position, float offset, glm::vec3 Color0, glm::vec3 Color1)
+vector<Vertex> YOrientation(glm::vec3 position, float xoffset, float zoffset, glm::vec3 Color0, glm::vec3 Color1)
 {
 	vector<Vertex> points;
 	points.push_back(Vertex{ position.x,position.y,position.z ,Color0.x,Color0.y,Color0.z });
-	points.push_back(Vertex{ position.x ,position.y,position.z +offset ,Color1.x,Color1.y,Color1.z });
-	points.push_back(Vertex{ position.x+offset,position.y,position.z,Color1.x,Color1.y,Color1.z });
-	points.push_back(Vertex{ position.x + offset,position.y,position.z +offset,Color0.x,Color0.y,Color0.z });
+	points.push_back(Vertex{ position.x ,position.y,position.z + zoffset ,Color1.x,Color1.y,Color1.z });
+	points.push_back(Vertex{ position.x+ xoffset,position.y,position.z,Color1.x,Color1.y,Color1.z });
+	points.push_back(Vertex{ position.x + xoffset,position.y,position.z + zoffset,Color0.x,Color0.y,Color0.z });
 	return points;
 }
-vector<Vertex> ZOrientation(glm::vec3 position, float offset, glm::vec3 Color0, glm::vec3 Color1)
+vector<Vertex> ZOrientation(glm::vec3 position, float xoffset, float zoffset, glm::vec3 Color0, glm::vec3 Color1)
 {
 	vector<Vertex> points;
 	points.push_back(Vertex{ position.x,position.y,position.z ,Color0.x,Color0.y,Color0.z });
-	points.push_back(Vertex{ position.x ,position.y,position.z + offset,Color1.x,Color1.y,Color1.z });
-	points.push_back(Vertex{ position.x ,position.y+offset,position.z ,Color1.x,Color1.y,Color1.z });
-	points.push_back(Vertex{ position.x ,position.y+offset,position.z + offset,Color0.x,Color0.y,Color0.z });
+	points.push_back(Vertex{ position.x ,position.y,position.z + zoffset,Color1.x,Color1.y,Color1.z });
+	points.push_back(Vertex{ position.x ,position.y+ xoffset,position.z ,Color1.x,Color1.y,Color1.z });
+	points.push_back(Vertex{ position.x ,position.y+ xoffset,position.z + zoffset,Color0.x,Color0.y,Color0.z });
 	return points;
 
 }
@@ -290,6 +290,22 @@ int main()
 	Camera camera(width, height, glm::vec3(0.0f, 1.f, 10.0f));
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
+
+	// Define the dimensions of the door
+	float doorWidth = 0.4f; // Width of the door
+	float doorHeight = 0.6f; // Height of the door
+
+	// Define the position of the door
+	glm::vec3 doorPosition = glm::vec3(-2.0f, 0.0f, -1.5f);
+
+	// Define the dimensions of the house
+	float houseWidth = doorWidth * 5; // Width of the house
+	float houseHeight = doorHeight + doorHeight / 1; // Height of the house
+
+	//Colors
+	glm::vec3 WallColor = glm::vec3(0.2f, 0.3f, 0.2f);
+	glm::vec3 DoorColor = glm::vec3(0.6f, 0.3f, 0.1f);
+
 	// Main while loop
 	while (!glfwWindowShouldClose(window))
 	{
@@ -308,40 +324,30 @@ int main()
 
 		//DrawCoordinateSystem(verticesCoordinate);
 
-		//player
-		DrawSquare(YOrientation(glm::vec3(-5,0,-5), 10,glm::vec3(0, 0.8f, 0.2f),glm::vec3(0,0.2f,0)));
+		//floor
+		DrawSquare(YOrientation(glm::vec3(-5, 0, -5), 10, 10, glm::vec3(0, 0.8f, 0.2f), glm::vec3(0, 0.2f, 0)));
 
 		//Door
-		glm::vec3 DoorColor = glm::vec3(0.6f, 0.3f, 0.1f);
-		DrawSquare(ZOrientation(glm::vec3(-2, 0, -1.5f), 0.2f, DoorColor, DoorColor));
-		DrawSquare(ZOrientation(glm::vec3(-2, 0.2f, -1.5f), 0.2f, DoorColor, DoorColor));
+		DrawSquare(XOrientation(doorPosition, doorWidth, doorHeight, DoorColor, DoorColor));
 
-		//house
-		glm::vec3 HouseColor = glm::vec3(0.2f, 0.3f, 0.2f);
-		DrawSquare(ZOrientation(glm::vec3(-2, 0, -2), 0.5f, HouseColor, HouseColor));
-		DrawSquare(ZOrientation(glm::vec3(-2, 0, -1.3), 0.5f, HouseColor, HouseColor));
-
-		DrawSquare(ZOrientation(glm::vec3(-3, 0, -2), 0.6f, HouseColor, HouseColor));
-		DrawSquare(ZOrientation(glm::vec3(-3, 0, -1.4), 0.6f, HouseColor, HouseColor));
-
-		DrawSquare(XOrientation(glm::vec3(-2.5f, 0, -2), 0.5f, HouseColor, HouseColor));
-		DrawSquare(XOrientation(glm::vec3(-3.f, 0, -2), 0.5f, HouseColor, HouseColor));
 		
-		DrawSquare(XOrientation(glm::vec3(-2.5f, 0, -0.8f), 0.5f, HouseColor, HouseColor));
-		DrawSquare(XOrientation(glm::vec3(-3.f, 0, -0.8f), 0.5f, HouseColor, HouseColor));
-		 
+		//House around door
+		DrawSquare(XOrientation(glm::vec3(doorPosition.x + doorWidth, doorPosition.y, doorPosition.z), houseWidth / 2, houseHeight, WallColor, WallColor));
+		DrawSquare(XOrientation(glm::vec3(doorPosition.x - (houseWidth / 2) , doorPosition.y, doorPosition.z), houseWidth / 2, houseHeight, WallColor, WallColor));
+
+		DrawSquare(ZOrientation(glm::vec3(doorPosition.x - (houseWidth / 2), doorPosition.y, doorPosition.z - houseWidth), houseHeight, houseWidth, WallColor, WallColor));
+		DrawSquare(ZOrientation(glm::vec3(doorPosition.x + (houseWidth / 2) + doorWidth, doorPosition.y, doorPosition.z - houseWidth), houseHeight, houseWidth, WallColor, WallColor));
+
+		DrawSquare(XOrientation(glm::vec3(doorPosition.x - (houseWidth / 2), doorPosition.y, doorPosition.z - houseWidth), houseWidth + doorWidth, houseHeight, WallColor, WallColor));
+		DrawSquare(XOrientation(glm::vec3(doorPosition.x, doorPosition.y + doorHeight, doorPosition.z), doorWidth, houseHeight - doorHeight, WallColor, WallColor));
+
 		
 		//Swap the back buffer with the front buffer
-
-
-
 		glfwSwapBuffers(window);
 		// Take care of all GLFW events
 		glfwPollEvents();
 	}
 	shaderProgram.Delete();
-
-
 
 	// Delete window before ending the program
 	glfwDestroyWindow(window);

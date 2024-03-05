@@ -53,11 +53,11 @@ void Camera::Inputs(GLFWwindow* window)
 	//}
 	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) //Shift, move faster
 	{
-		speed = 0.004f;
+		speed = 0.04f;
 	}
 	else if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE) //If not, move at normal speed
 	{
-		speed = 0.001f;
+		speed = 0.01f;
 	}
 
 
