@@ -252,6 +252,30 @@ void CreateCube(glm::vec3 position, float scale, float rotation)
 
 }
 
+
+void CreateSphere(glm::vec3 Position, float radius, float subdivisons, float steplength)
+{
+	vector<Vertex> vertices;
+	vector<Vertex> normals;
+	const double pi = 3.14159265358979323846;
+
+	float step;
+
+
+	for (float i = 0; i < subdivisons; i ++)
+	{
+		float X = (radius * cos((pi / 2) - (pi * i / subdivisons)) * (cos((2 * pi) * (i / subdivisons))));
+		cout << X << endl;
+		vertices.push_back(Vertex{ Position.x,Position.y,Position.z });
+	}
+}
+
+void Collision()
+{
+
+
+}
+
 int main()
 {
 	// Initialize GLFW
@@ -299,7 +323,9 @@ int main()
 
 	//Colors
 	glm::vec3 WallColor = glm::vec3(0.2f, 0.3f, 0.2f);
+	glm::vec3 WallColor1 = glm::vec3(0.2f, 0.31f, 0.2f);
 	glm::vec3 DoorColor = glm::vec3(0.6f, 0.3f, 0.1f);
+	glm::vec3 DoorColor1 = glm::vec3(0.61f, 0.31f, 0.11f);
 
 
 	float speed = 0.01f;
@@ -308,7 +334,6 @@ int main()
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
-
 
 	// Main while loop
 	while (!glfwWindowShouldClose(window))
@@ -339,11 +364,16 @@ int main()
 			MovementZ += speed;
 		}
 
+		glm::vec3 doorMove = glm::vec3(0.0f, 0.0f, 0.0f);
+		if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS)
+		{
+			doorMove = glm::vec3(-doorWidth, 0.f, 0.01f);
+		} 
+
 		//Camera 
 		Camera camera(width, height, glm::vec3(glm::vec3(( - 0.1f * MovementX), 1.f,(- 0.1f * MovementZ) + 5)));
-		
 		camera.Inputs(window);
-		camera.Matrix(50.0f, 0.1f, 500.0f, shaderProgram, "camMatrix");
+		camera.Matrix(45.0f, 0.1f, 100.0f, shaderProgram, "camMatrix");
 
 
 		//Cube
@@ -355,18 +385,21 @@ int main()
 		DrawSquare(YOrientation(glm::vec3(-10, 0, -10), 20, 20, glm::vec3(0, 0.8f, 0.2f), glm::vec3(0, 0.2f, 0)));
 
 		//Door
-		DrawSquare(XOrientation(doorPosition, doorWidth, doorHeight, DoorColor, DoorColor));
+		//DrawSquare(XOrientation(doorPosition, doorWidth, doorHeight, DoorColor, DoorColor1));
+		DrawSquare(XOrientation(glm::vec3(doorPosition.x + doorMove.x, doorPosition.y + doorMove.y, doorPosition.z + doorMove.z), doorWidth, doorHeight, DoorColor, DoorColor1));
 
-		
 		//House around door
-		DrawSquare(XOrientation(glm::vec3(doorPosition.x + doorWidth, doorPosition.y, doorPosition.z), houseWidth / 2, houseHeight, WallColor, WallColor));
-		DrawSquare(XOrientation(glm::vec3(doorPosition.x - (houseWidth / 2) , doorPosition.y, doorPosition.z), houseWidth / 2, houseHeight, WallColor, WallColor));
+		DrawSquare(XOrientation(glm::vec3(doorPosition.x + doorWidth, doorPosition.y, doorPosition.z), houseWidth / 2, houseHeight, WallColor, WallColor1));
+		DrawSquare(XOrientation(glm::vec3(doorPosition.x - (houseWidth / 2) , doorPosition.y, doorPosition.z), houseWidth / 2, houseHeight, WallColor, WallColor1));
 
-		DrawSquare(ZOrientation(glm::vec3(doorPosition.x - (houseWidth / 2), doorPosition.y, doorPosition.z - houseWidth), houseHeight, houseWidth, WallColor, WallColor));
+		DrawSquare(ZOrientation(glm::vec3(doorPosition.x - (houseWidth / 2), doorPosition.y, doorPosition.z - houseWidth), houseHeight, houseWidth, WallColor, WallColor1));
 		DrawSquare(ZOrientation(glm::vec3(doorPosition.x + (houseWidth / 2) + doorWidth, doorPosition.y, doorPosition.z - houseWidth), houseHeight, houseWidth, WallColor, WallColor));
 
-		DrawSquare(XOrientation(glm::vec3(doorPosition.x - (houseWidth / 2), doorPosition.y, doorPosition.z - houseWidth), houseWidth + doorWidth, houseHeight, WallColor, WallColor));
-		DrawSquare(XOrientation(glm::vec3(doorPosition.x, doorPosition.y + doorHeight, doorPosition.z), doorWidth, houseHeight - doorHeight, WallColor, WallColor));
+		DrawSquare(XOrientation(glm::vec3(doorPosition.x - (houseWidth / 2), doorPosition.y, doorPosition.z - houseWidth), houseWidth + doorWidth, houseHeight, WallColor, WallColor1));
+		DrawSquare(XOrientation(glm::vec3(doorPosition.x, doorPosition.y + doorHeight, doorPosition.z), doorWidth, houseHeight - doorHeight, WallColor, WallColor1));
+
+		//Roof
+		DrawSquare(YOrientation(glm::vec3(doorPosition.x - (houseWidth / 2), doorPosition.y + houseHeight, doorPosition.z - houseWidth), houseWidth + doorWidth, houseWidth, WallColor, WallColor1));
 
 		
 		//Swap the back buffer with the front buffer
@@ -381,6 +414,7 @@ int main()
 	// Terminate GLFW before ending the program
 	glfwTerminate();
 
+	
 
 	return 0;
 
