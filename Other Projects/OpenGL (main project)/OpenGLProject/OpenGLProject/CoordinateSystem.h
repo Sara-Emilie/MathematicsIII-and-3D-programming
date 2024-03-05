@@ -22,7 +22,7 @@
 #include "Shaders/VBO.h"
 #include "Shaders/EBO.h"
 
-struct Vertex 
+struct CoordinateSystemVertex 
 {
 	float x, y, z;
 	float r, g, b;
@@ -30,5 +30,11 @@ struct Vertex
 
 class CoordinateSystem
 {
+	public:
+
+		CoordinateSystem();
+		void DrawCoordinateSystem(std::vector<CoordinateSystemVertex> vertices);
+		void CreateCoordinateSystem(std::vector<CoordinateSystemVertex>& vertices, float start, float iterations);
+
 };
 

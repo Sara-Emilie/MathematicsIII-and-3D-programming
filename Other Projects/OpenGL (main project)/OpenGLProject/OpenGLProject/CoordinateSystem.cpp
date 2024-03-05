@@ -1,7 +1,11 @@
 #include "CoordinateSystem.h"
 
 
-void CreateCoordinateSystem(std::vector<Vertex>& vertices, float start, float iterations) {
+CoordinateSystem::CoordinateSystem()
+{
+
+};
+void CoordinateSystem::CreateCoordinateSystem(std::vector<CoordinateSystemVertex>& vertices, float start, float iterations) {
 
 	// X-axis
 	for (float i = start; i < iterations; ++i) {
@@ -9,7 +13,7 @@ void CreateCoordinateSystem(std::vector<Vertex>& vertices, float start, float it
 		float x = i * n;
 		float y = 0.0;
 		float z = 0.0f;
-		Vertex vertex;
+		CoordinateSystemVertex vertex;
 		vertex.x = x;
 		vertex.y = y;
 		vertex.z = z;
@@ -25,7 +29,7 @@ void CreateCoordinateSystem(std::vector<Vertex>& vertices, float start, float it
 		float x = 0.0;
 		float y = i * n;
 		float z = 0.0f;
-		Vertex vertex;
+		CoordinateSystemVertex vertex;
 		vertex.x = x;
 		vertex.y = y;
 		vertex.z = z;
@@ -40,7 +44,7 @@ void CreateCoordinateSystem(std::vector<Vertex>& vertices, float start, float it
 		float x = 0.0;
 		float y = 0.0f;
 		float z = i * n;
-		Vertex vertex;
+		CoordinateSystemVertex vertex;
 		vertex.x = x;
 		vertex.y = y;
 		vertex.z = z;
@@ -49,23 +53,23 @@ void CreateCoordinateSystem(std::vector<Vertex>& vertices, float start, float it
 		vertex.b = 1.0f;  // Adjust for coloring effect
 		vertices.push_back(vertex);
 	}
-}
+};
 
-void DrawCoordinateSystem(std::vector<Vertex> vertices)
+void CoordinateSystem::DrawCoordinateSystem(std::vector<CoordinateSystemVertex> vertices)
 {
 	// Draw coordinate system
 	VAO coordinateVAO;
 	coordinateVAO.Bind();
 
 	// Create VBO object and initialize it with vertex data
-	VBO coordinateVBO(reinterpret_cast<GLfloat*>(vertices.data()), static_cast<GLsizeiptr>(vertices.size() * sizeof(Vertex)));
+	VBO coordinateVBO(reinterpret_cast<GLfloat*>(vertices.data()), static_cast<GLsizeiptr>(vertices.size() * sizeof(CoordinateSystemVertex)));
 	coordinateVBO.Bind();
 
 	// Specify vertex attribute pointers
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(CoordinateSystemVertex), (void*)0);
 	glEnableVertexAttribArray(0);
 
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(CoordinateSystemVertex), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
 	// Unbind VBO and VAO
@@ -80,5 +84,5 @@ void DrawCoordinateSystem(std::vector<Vertex> vertices)
 
 	coordinateVBO.Delete();
 	coordinateVAO.Delete();
-}
+};
 

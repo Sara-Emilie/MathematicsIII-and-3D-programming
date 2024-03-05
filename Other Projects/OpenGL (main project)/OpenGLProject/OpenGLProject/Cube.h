@@ -5,6 +5,7 @@
 #include "Shaders/EBO.h"
 #include "Shaders/ShaderClass.h"
 #include <glm/glm.hpp>
+#include "BoundingBox.h"
 
 #ifndef CUBE_H
 #define CUBE_H
@@ -21,9 +22,12 @@ class Cube
 {
 	public:
 
+	BoundingBox AABB;
+
 	Cube();
 	void DrawCube(std::vector<CubeVertex> points);
 	void CreateCube(glm::vec3 position, float scale, float rotation);
 };
+
 
 #endif // CUBE_H

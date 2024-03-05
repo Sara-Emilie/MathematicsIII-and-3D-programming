@@ -6,6 +6,7 @@
 #include <GLFW/glfw3.h>
 #include <vector>
 #include <cmath>
+#include "BoundingBox.h"
 
 
 
@@ -33,7 +34,7 @@ unsigned int CubeIndices[] =
 Cube::Cube()
 {
 
-
+    
 };
 
 void Cube::DrawCube(std::vector<CubeVertex> points)
@@ -68,7 +69,7 @@ void Cube::DrawCube(std::vector<CubeVertex> points)
 
 };
 
-void Cube::CreateCube(glm::vec3 position, float scale, float rotation)
+void Cube::CreateCube(glm::vec3 position, glm::vec3 scale, float rotation)
 {
 	std::vector<CubeVertex> Cubepoints;
 	Cubepoints.push_back(CubeVertex{ position.x,position.y,position.z,1,1,0 });
@@ -81,6 +82,9 @@ void Cube::CreateCube(glm::vec3 position, float scale, float rotation)
 	Cubepoints.push_back(CubeVertex{ position.x + scale,position.y + scale,position.z + scale,1,1,1 });
 	Cubepoints.push_back(CubeVertex{ position.x,position.y,position.z + scale,1,0.3f,0.4f });
 
+	AABB.Position = position;
+	AABB.Extent = scale / 2;
 	DrawCube(Cubepoints);
 
 };
+
