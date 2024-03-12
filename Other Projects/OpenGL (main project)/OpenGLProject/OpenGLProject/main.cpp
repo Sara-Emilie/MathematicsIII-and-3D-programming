@@ -13,9 +13,9 @@
 #include <cmath>
 #include <cstddef>
 #include <string>
-
+#include "NPC.h"
 #include <Eigen/Dense>
-
+#include "Trophy.h"
 #include "Shaders/ShaderClass.h"
 #include "Shaders/VAO.h"
 #include "Shaders/VBO.h"
@@ -25,6 +25,7 @@
 #include "Wall.h"
 using namespace std;
 using namespace Eigen;
+using namespace glm;
 
 class Cube;
 class Wall;
@@ -84,6 +85,8 @@ int main()
 	Cube cube;
 	Cube cube2;
 	Wall walls;
+	NPC npc;
+	Trophy trophy;
 
 	float speed = 0.1f;
 	float MovementX{0};
@@ -145,6 +148,8 @@ int main()
 
 		cube2.CreateCube(glm::vec3(1, 0, 1), glm::vec3(1, 0.5f, 1),0);
 		walls.CreateHouse(glm::vec3(-2,0,-2),glm::vec3(2,1,2));
+		npc.CreateNPC(glm::vec3(0, 0, 0), glm::vec3(0.5f, .5f, .5f));
+		trophy.CreateTrophy(vec3(1, 0, -2), vec3(0.2f, .2f, .2f));
 		//DrawCoordinateSystem(verticesCoordinate);
 
 		//floor

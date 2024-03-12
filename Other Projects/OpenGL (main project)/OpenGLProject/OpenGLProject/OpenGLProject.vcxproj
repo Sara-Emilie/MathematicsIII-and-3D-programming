@@ -137,10 +137,12 @@
     <ClCompile Include="Dependencies\includes\glm\detail\glm.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="NPC.cpp" />
     <ClCompile Include="Shaders\EBO.cpp" />
     <ClCompile Include="Shaders\ShaderClass.cpp" />
     <ClCompile Include="Shaders\VBO.cpp" />
     <ClCompile Include="Shaders\VAO.cpp" />
+    <ClCompile Include="Trophy.cpp" />
     <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -917,10 +919,12 @@
     <ClInclude Include="Dependencies\includes\glm\vec4.hpp" />
     <ClInclude Include="Dependencies\includes\glm\vector_relational.hpp" />
     <ClInclude Include="Dependencies\includes\KHR\khrplatform.h" />
+    <ClInclude Include="NPC.h" />
     <ClInclude Include="Shaders\EBO.h" />
     <ClInclude Include="Shaders\ShaderClass.h" />
     <ClInclude Include="Shaders\VBO.h" />
     <ClInclude Include="Shaders\VAO.h" />
+    <ClInclude Include="Trophy.h" />
     <ClInclude Include="Wall.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
