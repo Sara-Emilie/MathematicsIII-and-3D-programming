@@ -15,7 +15,7 @@ GLuint NPCIndices[]
 
 NPC::NPC()
 {
-	
+	Color = glm::vec3(1, 0, 1);
 }
 
 void NPC::Movement(glm::vec3 position, glm::vec3 Targetlocation)
@@ -31,11 +31,12 @@ void NPC::CreateNPC(glm::vec3 position, glm::vec3 size)
 	std::vector<NPCVertex> NPCPoints;
 	NPCPoints.push_back(NPCVertex{ position.x,position.y,position.z ,1.f,0.f,0.f});
 	NPCPoints.push_back(NPCVertex{ position.x + size.x,position.y,position.z,1.f,0.f,0.f });
-	NPCPoints.push_back(NPCVertex{ position.x+size.x/2,position.y+size.y,position.z+size.z/2,0.f,1.f,1.f });
+	NPCPoints.push_back(NPCVertex{ position.x+size.x/2,position.y+size.y,position.z+size.z/2,Color.x,Color.y,Color.z });
 	NPCPoints.push_back(NPCVertex{ position.x,position.y,position.z + size.z,1.f,0.f,0.f });
 	NPCPoints.push_back(NPCVertex{ position.x + size.x,position.y,position.z + size.z,1.f,0.f,0.f });
 	DrawNPC(NPCPoints);
-
+	NPCBox.Position = position;
+	NPCBox.Extent = glm::vec3(size.x/2,size.y/2,size.z/2);
 }
 
 

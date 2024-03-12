@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-
+#include "BoundingBox.h"
 #include "glm/vec3.hpp"
 struct NPCVertex
 {
@@ -10,6 +10,8 @@ class NPC
 {
 
 public:
+	BoundingBox NPCBox;
+	glm::vec3 Color;
 	glm::vec3 currentposition;
 	glm::vec3 Targetposition;
 	glm::vec3 Oldposition;

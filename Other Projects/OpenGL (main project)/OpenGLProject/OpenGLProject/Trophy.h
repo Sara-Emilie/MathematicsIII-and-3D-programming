@@ -2,6 +2,7 @@
 #include <vector>
 
 #include "glm/vec3.hpp"
+#include "BoundingBox.h"
 
 struct trophyVertex
 {
@@ -10,6 +11,7 @@ struct trophyVertex
 class Trophy
 {
 public:
+	BoundingBox AABB;
 	Trophy();
 	void CreateTrophy(glm::vec3 position, glm::vec3 size);
 	void DrawTrophy(std::vector<trophyVertex> points);

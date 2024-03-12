@@ -27,8 +27,6 @@ using namespace std;
 using namespace Eigen;
 using namespace glm;
 
-class Cube;
-class Wall;
 // Window dimensions
 const unsigned int width = 800;
 const unsigned int height = 800;
@@ -91,6 +89,7 @@ int main()
 	float speed = 0.1f;
 	float MovementX{0};
 	float MovementZ{ 0 };
+	vec3 Cameraposition;
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
@@ -137,10 +136,7 @@ int main()
 			
 		} 
 
-		//Camera 
-		Camera camera(width, height, glm::vec3(glm::vec3(( - 0.1f * MovementX), 1.f,(- 0.1f * MovementZ) + 5)));
-		camera.Inputs(window);
-		camera.Matrix(45.0f, 0.1f, 100.0f, shaderProgram, "camMatrix");
+		
 
 
 		//Cube
@@ -172,18 +168,29 @@ int main()
 		//Roof
 		//walls.CreateYWall(glm::vec3(doorPosition.x - (houseWidth / 2), doorPosition.y + houseHeight, doorPosition.z - houseWidth), glm::vec3(houseWidth + doorWidth, 1,houseWidth), WallColor, WallColor1);
 
-	
-		if(cube.AABB.TestAABBAABB(cube2.AABB)|| cube.AABB.TestAABBAABB(walls.AABB))
+		float Degree;
+		if(cube.AABB.TestAABBAABB(cube2.AABB)|| cube.AABB.TestAABBAABB(walls.AABB)||cube.AABB.TestAABBAABB(npc.NPCBox)|| cube.AABB.TestAABBAABB(trophy.AABB))
 		{
 			walls.WallColor = glm::vec3(0.f, 1.f, 1.f);
 			cout << "colliding" << endl;
-
+			//Cameraposition = glm::vec3(-1.5f,1,-2);
+			//Degree = 90.f;
+			npc.Color = glm::vec3(1, 1, 0);
 		}
 		else if (!cube.AABB.TestAABBAABB(cube2.AABB) || !cube.AABB.TestAABBAABB(walls.AABB))
 		{
 			walls.WallColor = glm::vec3(1.f, 0, 1.f);
 			cout << "not colliding" << endl;
+			//Cameraposition = glm::vec3(glm::vec3((-0.1f * MovementX), 1.f, (-0.1f * MovementZ) + 5));
+			//Degree = 45.f;
+			npc.Color = glm::vec3(1, 0, 1);
 		}
+		//Camera
+		Cameraposition = glm::vec3(glm::vec3((-0.1f * MovementX), 1.f, (-0.1f * MovementZ) + 5));
+		Degree = 45.f;
+		Camera camera(width, height, Cameraposition);
+		camera.Inputs(window);
+		camera.Matrix(Degree, .1f, 100.0f, shaderProgram, "camMatrix");
 		
 		//Swap the back buffer with the front buffer
 		glfwSwapBuffers(window);
