@@ -22,10 +22,16 @@ class Wall
 {
 public:
 	Wall();
+
+	glm::vec3 WallColor;
+	glm::vec3 WallColor1 ;
+	glm::vec3 DoorColor;
+	glm::vec3 DoorColor1;
 	BoundingBox AABB;
 	void DrawSquare(std::vector<WallVertex> position);
 	void CreateXWall(glm::vec3 position, glm::vec3 offset, glm::vec3 Color0, glm::vec3 Color1);
 	void CreateYWall(glm::vec3 position, glm::vec3 offset, glm::vec3 Color0, glm::vec3 Color1);
 	void CreateZWall(glm::vec3 position, glm::vec3 offset, glm::vec3 Color0, glm::vec3 Color1);
-};
+	void CreateHouse(glm::vec3 position, glm::vec3 offset);
+};	
 #endif // WALL_H

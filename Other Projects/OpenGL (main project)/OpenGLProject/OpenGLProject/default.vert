@@ -12,6 +12,8 @@ out vec3 color;
 uniform float scale;
 
 uniform mat4 camMatrix;
+uniform mat4 transform;
+
 
 
 

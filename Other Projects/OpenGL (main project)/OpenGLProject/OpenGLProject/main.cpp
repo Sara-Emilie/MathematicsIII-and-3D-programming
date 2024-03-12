@@ -64,22 +64,22 @@ int main()
 	// Generates Shader object using shaders defualt.vert and default.frag
 	Shader shaderProgram("default.vert", "default.frag");
 
-	// Define the dimensions of the door
-	float doorWidth = 0.4f; // Width of the door
-	float doorHeight = 0.6f; // Height of the door
+	//// Define the dimensions of the door
+	//float doorWidth = 0.4f; // Width of the door
+	//float doorHeight = 0.6f; // Height of the door
 
-	// Define the position of the door
-	glm::vec3 doorPosition = glm::vec3(-2.0f, 0.0f, -1.0f);
+	//// Define the position of the door
+	//glm::vec3 doorPosition = glm::vec3(-2.0f, 0.0f, -1.0f);
 
-	// Define the dimensions of the house
-	float houseWidth = doorWidth * 5; // Width of the house
-	float houseHeight = doorHeight + doorHeight / 1; // Height of the house
+	//// Define the dimensions of the house
+	//float houseWidth = doorWidth * 5; // Width of the house
+	//float houseHeight = doorHeight + doorHeight / 1; // Height of the house
 
-		//Colors
-	glm::vec3 WallColor = glm::vec3(0.2f, 0.3f, 0.2f);
-	glm::vec3 WallColor1 = glm::vec3(0.2f, 0.31f, 0.2f);
-	glm::vec3 DoorColor = glm::vec3(0.6f, 0.3f, 0.1f);
-	glm::vec3 DoorColor1 = glm::vec3(0.61f, 0.31f, 0.11f);
+	//	//Colors
+	//glm::vec3 WallColor = glm::vec3(0.2f, 0.3f, 0.2f);
+	//glm::vec3 WallColor1 = glm::vec3(0.2f, 0.31f, 0.2f);
+	//glm::vec3 DoorColor = glm::vec3(0.6f, 0.3f, 0.1f);
+	//glm::vec3 DoorColor1 = glm::vec3(0.61f, 0.31f, 0.11f);
 
 	Cube cube;
 	Cube cube2;
@@ -124,13 +124,13 @@ int main()
 		glm::vec3 doorMove = glm::vec3(0.0f, 0.0f, 0.0f);
 		if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS)
 		{
-			//doorMove = glm::vec3(-doorWidth, 0.f, 0.01f);
-			glm::vec4 vec(doorPosition, 1.0f);
-			glm::mat4 trans = glm::mat4(1.0f);
-			trans = glm::rotate(trans, glm::radians(90.f), glm::vec3(0.f, 0.f, 1.f));
-			trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
-			vec = trans * vec;
-			doorPosition.y = vec.y;
+			////doorMove = glm::vec3(-doorWidth, 0.f, 0.01f);
+			//glm::vec4 vec(doorPosition, 1.0f);
+			//glm::mat4 trans = glm::mat4(1.0f);
+			//trans = glm::rotate(trans, glm::radians(90.f), glm::vec3(0.f, 0.f, 1.f));
+			//trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
+			//vec = trans * vec;
+			//doorPosition.y = vec.y;
 			
 		} 
 
@@ -144,38 +144,40 @@ int main()
 		cube.CreateCube(glm::vec3(-0.1f * MovementX, 0, -0.1f * MovementZ), glm::vec3(0.2f,0.2f,0.2f), 0.f);
 
 		cube2.CreateCube(glm::vec3(1, 0, 1), glm::vec3(1, 0.5f, 1),0);
+		walls.CreateHouse(glm::vec3(-2,0,-2),glm::vec3(2,1,2));
 		//DrawCoordinateSystem(verticesCoordinate);
 
 		//floor
-		walls.CreateYWall(glm::vec3(-10, 0, -10),glm::vec3( 20,20, 20), glm::vec3(0, 0.8f, 0.2f), glm::vec3(0, 0.2f, 0));
+	//	walls.CreateYWall(glm::vec3(-10, 0, -10),glm::vec3( 20,20, 20), glm::vec3(0, 0.8f, 0.2f), glm::vec3(0, 0.2f, 0));
 
 		//Door
 		//DrawSquare(XOrientation(doorPosition, doorWidth, doorHeight, DoorColor, DoorColor1));
-		walls.CreateXWall(glm::vec3(doorPosition.x + doorMove.x, doorPosition.y + doorMove.y, doorPosition.z + doorMove.z),glm::vec3(doorWidth, doorHeight, 1), DoorColor, DoorColor1);
+	//	walls.CreateXWall(glm::vec3(doorPosition.x + doorMove.x, doorPosition.y + doorMove.y, doorPosition.z + doorMove.z),glm::vec3(doorWidth, doorHeight, 1), DoorColor, DoorColor1);
 
 		//House around door
-		walls.CreateXWall(glm::vec3(doorPosition.x + doorWidth, doorPosition.y, doorPosition.z), glm::vec3(houseWidth / 2, houseHeight,1), WallColor, WallColor1);
-		walls.CreateXWall(glm::vec3(doorPosition.x - (houseWidth / 2) , doorPosition.y, doorPosition.z), glm::vec3(houseWidth / 2, houseHeight, 1), WallColor, WallColor1);
+		//walls.CreateXWall(glm::vec3(doorPosition.x + doorWidth, doorPosition.y, doorPosition.z), glm::vec3(houseWidth / 2, houseHeight,0.1f), WallColor, WallColor1);
+	//	walls.CreateXWall(glm::vec3(doorPosition.x - (houseWidth / 2) , doorPosition.y, doorPosition.z), glm::vec3(houseWidth / 2, houseHeight, 1), WallColor, WallColor1);
 
-		walls.CreateZWall(glm::vec3(doorPosition.x - (houseWidth / 2), doorPosition.y, doorPosition.z - houseWidth), glm::vec3(1, houseHeight, houseWidth), WallColor, WallColor1);
-		walls.CreateZWall(glm::vec3(doorPosition.x + (houseWidth / 2) + doorWidth, doorPosition.y, doorPosition.z - houseWidth), glm::vec3(1, houseHeight, houseWidth), WallColor, WallColor);
+		//walls.CreateZWall(glm::vec3(doorPosition.x - (houseWidth / 2), doorPosition.y, doorPosition.z - houseWidth), glm::vec3(1, houseHeight, houseWidth), WallColor, WallColor1);
+		//walls.CreateZWall(glm::vec3(doorPosition.x + (houseWidth / 2) + doorWidth, doorPosition.y, doorPosition.z - houseWidth), glm::vec3(1, houseHeight, houseWidth), WallColor, WallColor);
 
-		walls.CreateXWall(glm::vec3(doorPosition.x - (houseWidth / 2), doorPosition.y, doorPosition.z - houseWidth), glm::vec3(houseWidth + doorWidth, houseHeight, 1), WallColor, WallColor1);
-		walls.CreateXWall(glm::vec3(doorPosition.x, doorPosition.y + doorHeight, doorPosition.z), glm::vec3(doorWidth, houseHeight - doorHeight, 1), WallColor, WallColor1);
+		//walls.CreateXWall(glm::vec3(doorPosition.x - (houseWidth / 2), doorPosition.y, doorPosition.z - houseWidth), glm::vec3(houseWidth + doorWidth, houseHeight, 1), WallColor, WallColor1);
+		//walls.CreateXWall(glm::vec3(doorPosition.x, doorPosition.y + doorHeight, doorPosition.z), glm::vec3(doorWidth, houseHeight - doorHeight, 1), WallColor, WallColor1);
 
 		//Roof
-		walls.CreateYWall(glm::vec3(doorPosition.x - (houseWidth / 2), doorPosition.y + houseHeight, doorPosition.z - houseWidth), glm::vec3(houseWidth + doorWidth, 1,houseWidth), WallColor, WallColor1);
+		//walls.CreateYWall(glm::vec3(doorPosition.x - (houseWidth / 2), doorPosition.y + houseHeight, doorPosition.z - houseWidth), glm::vec3(houseWidth + doorWidth, 1,houseWidth), WallColor, WallColor1);
 
-		if(!cube.AABB.TestAABBAABB(cube2.AABB))
+	
+		if(cube.AABB.TestAABBAABB(cube2.AABB)|| cube.AABB.TestAABBAABB(walls.AABB))
 		{
-			WallColor = glm::vec3(1.f, 0, 1.f);
-			cout << "not colliding" << endl;
-		}
-		if(cube.AABB.TestAABBAABB(cube2.AABB))
-		{
-			WallColor = glm::vec3(0.f, 1.f, 1.f);
+			walls.WallColor = glm::vec3(0.f, 1.f, 1.f);
 			cout << "colliding" << endl;
 
+		}
+		else if (!cube.AABB.TestAABBAABB(cube2.AABB) || !cube.AABB.TestAABBAABB(walls.AABB))
+		{
+			walls.WallColor = glm::vec3(1.f, 0, 1.f);
+			cout << "not colliding" << endl;
 		}
 		
 		//Swap the back buffer with the front buffer
