@@ -21,6 +21,7 @@ NPC::NPC()
 void NPC::Movement(glm::vec3 position, glm::vec3 Targetlocation)
 {
 	
+	
 }
 
 void NPC::CreateNPC(glm::vec3 position, glm::vec3 size)
@@ -30,7 +31,7 @@ void NPC::CreateNPC(glm::vec3 position, glm::vec3 size)
 	std::vector<NPCVertex> NPCPoints;
 	NPCPoints.push_back(NPCVertex{ position.x,position.y,position.z ,1.f,0.f,0.f});
 	NPCPoints.push_back(NPCVertex{ position.x + size.x,position.y,position.z,1.f,0.f,0.f });
-	NPCPoints.push_back(NPCVertex{ position.x+size.x/2,position.y+size.y,position.z+size.z/2,1.f,0.f,0.f });
+	NPCPoints.push_back(NPCVertex{ position.x+size.x/2,position.y+size.y,position.z+size.z/2,0.f,1.f,1.f });
 	NPCPoints.push_back(NPCVertex{ position.x,position.y,position.z + size.z,1.f,0.f,0.f });
 	NPCPoints.push_back(NPCVertex{ position.x + size.x,position.y,position.z + size.z,1.f,0.f,0.f });
 	DrawNPC(NPCPoints);
