@@ -85,6 +85,11 @@ int main()
 	Wall walls;
 	NPC npc;
 	Trophy trophy;
+	Trophy trophy2;
+	Trophy trophy3;
+	Trophy trophy4;
+	Trophy trophy5;
+	Trophy trophy6;
 
 	float speed = 0.1f;
 	float MovementX{0};
@@ -93,6 +98,14 @@ int main()
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
+
+	bool destoryTrophy1 = false;
+	bool destoryTrophy2 = false;
+	bool destoryTrophy3 = false;
+	bool destoryTrophy4 = false;
+	bool destoryTrophy5= false;
+	bool destoryTrophy6 = false;
+	
 
 	// Main while loop
 	while (!glfwWindowShouldClose(window))
@@ -136,16 +149,41 @@ int main()
 			
 		} 
 
-		
-
-
+	
 		//Cube
 		cube.CreateCube(glm::vec3(-0.1f * MovementX, 0, -0.1f * MovementZ), glm::vec3(0.2f,0.2f,0.2f), 0.f);
 
 		cube2.CreateCube(glm::vec3(1, 0, 1), glm::vec3(1, 0.5f, 1),0);
 		walls.CreateHouse(glm::vec3(-2,0,-2),glm::vec3(2,1,2));
 		npc.CreateNPC(glm::vec3(0, 0, 0), glm::vec3(0.5f, .5f, .5f));
-		trophy.CreateTrophy(vec3(1, 0, -2), vec3(0.2f, .2f, .2f));
+		
+
+		//Trophy
+		if (destoryTrophy1 == false)
+		{
+			trophy.CreateTrophy(vec3(1, 0, -2), vec3(0.2f, .2f, .2f));
+		}
+		if (destoryTrophy2 == false)
+		{
+			trophy2.CreateTrophy(vec3(1, 0, -1), vec3(0.2f, .2f, .2f));
+		}
+		if (destoryTrophy3 == false)
+		{
+			trophy3.CreateTrophy(vec3(1, 0, 0), vec3(0.2f, .2f, .2f));
+		}
+		if (destoryTrophy4 == false)
+		{
+			trophy4.CreateTrophy(vec3(-1, 0, 1), vec3(0.2f, .2f, .2f));
+		}
+		if (destoryTrophy5 == false)
+		{
+			trophy5.CreateTrophy(vec3(-1, 0, 2), vec3(0.2f, .2f, .2f));
+		}
+		if (destoryTrophy6 == false)
+		{
+			trophy6.CreateTrophy(vec3(-1, 0, 3), vec3(0.2f, .2f, .2f));
+		}
+
 		//DrawCoordinateSystem(verticesCoordinate);
 
 		//floor
@@ -169,7 +207,7 @@ int main()
 		//walls.CreateYWall(glm::vec3(doorPosition.x - (houseWidth / 2), doorPosition.y + houseHeight, doorPosition.z - houseWidth), glm::vec3(houseWidth + doorWidth, 1,houseWidth), WallColor, WallColor1);
 
 		float Degree;
-		if(cube.AABB.TestAABBAABB(cube2.AABB)|| cube.AABB.TestAABBAABB(walls.AABB)||cube.AABB.TestAABBAABB(npc.NPCBox)|| cube.AABB.TestAABBAABB(trophy.AABB))
+		if (cube.AABB.TestAABBAABB(cube2.AABB) || cube.AABB.TestAABBAABB(walls.AABB) || cube.AABB.TestAABBAABB(npc.NPCBox) || cube.AABB.TestAABBAABB(trophy.AABB))
 		{
 			walls.WallColor = glm::vec3(0.f, 1.f, 1.f);
 			cout << "colliding" << endl;
@@ -185,6 +223,36 @@ int main()
 			//Degree = 45.f;
 			npc.Color = glm::vec3(1, 0, 1);
 		}
+		
+		//Trophy collision (pickups)
+		if (cube.AABB.TestAABBAABB(trophy.AABB))
+		{
+			destoryTrophy1 = true;
+		}
+		else if (cube.AABB.TestAABBAABB(trophy2.AABB))
+		{
+			destoryTrophy2 = true;
+		}
+		else if (cube.AABB.TestAABBAABB(trophy3.AABB))
+		{
+			destoryTrophy3 = true;
+		}
+		else if (cube.AABB.TestAABBAABB(trophy4.AABB))
+		{
+			destoryTrophy4 = true;
+		}
+		else if (cube.AABB.TestAABBAABB(trophy5.AABB))
+		{
+			destoryTrophy5 = true;
+		}
+		else if (cube.AABB.TestAABBAABB(trophy6.AABB))
+		{
+			destoryTrophy6 = true;
+		}
+		
+
+	
+		
 		//Camera
 		Cameraposition = glm::vec3(glm::vec3((-0.1f * MovementX), 1.f, (-0.1f * MovementZ) + 5));
 		Degree = 45.f;
