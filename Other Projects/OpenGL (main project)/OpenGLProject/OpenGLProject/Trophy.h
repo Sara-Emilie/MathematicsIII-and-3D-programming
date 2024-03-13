@@ -11,6 +11,7 @@ struct trophyVertex
 class Trophy
 {
 public:
+	glm::vec3 Color;
 	BoundingBox AABB;
 	Trophy();
 	void CreateTrophy(glm::vec3 position, glm::vec3 size);

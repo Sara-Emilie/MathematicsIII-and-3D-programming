@@ -19,17 +19,18 @@ GLuint trophyIndices[]
 };
 Trophy::Trophy()
 {
+	Color = glm::vec3(0.f, 1.f, 1.f);
 
 }
 void Trophy::CreateTrophy(glm::vec3 position, glm::vec3 size)
 {
 	std::vector<trophyVertex> trophy_vertices;
-	trophy_vertices.push_back(trophyVertex{position.x + size.x/2,position.y,position.z+size.z/2,1.f,1.f,0.f });
+	trophy_vertices.push_back(trophyVertex{position.x + size.x/2,position.y,position.z+size.z/2, Color.x,Color.y,Color.z });
 	trophy_vertices.push_back(trophyVertex{ position.x,position.y+size.y/2,position.z,0.f,1.f,1.f });
 	trophy_vertices.push_back(trophyVertex{ position.x+size.x,position.y + size.y / 2,position.z,0.f,1.f,1.f });
 	trophy_vertices.push_back(trophyVertex{ position.x,position.y + size.y / 2,position.z+size.z,0.f,1.f,1.f });
 	trophy_vertices.push_back(trophyVertex{ position.x+size.x,position.y + size.y / 2,position.z +size.z,0.f,1.f,1.f });
-	trophy_vertices.push_back(trophyVertex{ position.x+size.x/2,position.y + size.y,position.z + size.z/2,1.f,0.f,1.f });
+	trophy_vertices.push_back(trophyVertex{ position.x+size.x/2,position.y + size.y,position.z + size.z/2,Color.x,Color.y,Color.z });
 	DrawTrophy(trophy_vertices);
 	AABB.Position = position;
 	AABB.Extent = glm::vec3(size.x / 2, size.y / 2, size.z / 2);
